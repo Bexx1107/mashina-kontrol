@@ -1,0 +1,35 @@
+{
+  "name": "mashina-kontrol",
+  "version": "2.1.0",
+  "description": "Artisanal, ultra-low latency, zero-install virtual PC game controller, macro deck, trackpad & presentation remote by Mashina Studio.",
+  "main": "electron/main.js",
+  "bin": {
+    "kontrol": "server/daemon.js"
+  },
+  "scripts": {
+    "start": "node server/daemon.js",
+    "electron": "electron .",
+    "dev": "electron .",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "dist": "electron-builder",
+    "test": "node test/test-loop.js"
+  },
+  "keywords": [
+    "virtual-controller",
+    "gamepad",
+    "macro-deck",
+    "stream-deck",
+    "touchpad",
+    "presentation-remote",
+    "low-latency",
+    "websocket",
+    "mashina-studio"
+  ],
+  "author": "Mashina Studio / Bexx",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^44.4.1",
+    "electron-builder": "^26.15.3"
+  }
+}

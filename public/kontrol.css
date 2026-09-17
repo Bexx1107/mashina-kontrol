@@ -1,0 +1,3117 @@
+/* ============================================================
+   MASHINA KONTROL — Ultimate PC Control App Stylesheet
+   Design System: Workshop / Machined Hardware (Mashina Studio)
+   Author: Mashina Studio / Bexx (2026)
+   ============================================================ */
+
+:root {
+  /* Mashina Core Palette (Default: Charcoal Dark) */
+  --mashina-red:       #C8102E; /* Signal Crimson */
+  --mashina-red-glow:  rgba(200, 16, 46, 0.45);
+  --mashina-paper:     #F4F1EA; /* Workshop Paper */
+  --mashina-ink:       #141312; /* Deep Ink */
+  --mashina-deep:      #181615; /* Machined Charcoal */
+  --mashina-surface:   #201D1B; /* Hardware Surface */
+  --mashina-tile:      #262220; /* Machined Tile */
+  --mashina-tile-press:#141211; /* Pressed Depth */
+  --mashina-steel:     #555A62; /* Steel Gray Dark */
+  --mashina-metal:     #8A8F98; /* Steel Gray Light */
+  --mashina-line:      #3C3935; /* Dark Grid Border */
+  --mashina-line-light:#504C47; /* Highlight Border */
+  --mashina-cyan:      #00F0FF; /* Machina Cyan */
+  --mashina-emerald:   #00E676; /* Status Online LED */
+  --mashina-amber:     #FFB800; /* Status Warning / Reconnecting */
+
+  /* Surface Hierarchy */
+  --bg-app:            #0B0A09;
+  --bg-panel:          #161413;
+  --text-main:         #F4F1EA;
+  --text-muted:        #8A8F98;
+
+  /* Typography */
+  --font-display: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body:    "Sarabun", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+
+  /* Geometry & Mechanical Shadows */
+  --border-hard:  2px solid var(--mashina-line);
+  --shadow-tile:  0 3px 0 #000000, 0 6px 12px rgba(0,0,0,0.5);
+  --shadow-press: inset 0 2px 4px #000000;
+  --radius-crisp: 3px;
+}
+
+/* ─── THEME VARIATIONS ───────────────────────────────────────── */
+/* Theme 2: Workshop Paper (Light Blueprint) */
+[data-theme="paper"], body.theme-paper {
+  --bg-app:            #EFECE4;
+  --bg-panel:          #F8F6F0;
+  --mashina-surface:   #EAE5DB;
+  --mashina-tile:      #FFFFFF;
+  --mashina-tile-press:#DFDAD0;
+  --mashina-line:      #C8C1B0;
+  --mashina-line-light:#AFA898;
+  --mashina-steel:     #787268;
+  --mashina-metal:     #555046;
+  --mashina-cyan:      #007A87;
+  --mashina-amber:     #B36B00;
+  --text-main:         #141312;
+  --text-muted:        #4A453C;
+  --shadow-tile:       0 2px 0 #B0A898, 0 4px 8px rgba(0,0,0,0.08);
+  --shadow-press:      inset 0 2px 4px rgba(0,0,0,0.18);
+}
+
+/* Theme 3: Phosphor Amber CRT */
+[data-theme="amber"], body.theme-amber {
+  --bg-app:            #090804;
+  --bg-panel:          #141208;
+  --mashina-surface:   #1C1706;
+  --mashina-tile:      #241E0A;
+  --mashina-tile-press:#120F04;
+  --mashina-line:      #4A3D14;
+  --mashina-line-light:#66541C;
+  --mashina-steel:     #80651A;
+  --mashina-metal:     #A3832B;
+  --mashina-red:       #FFB800;
+  --mashina-red-glow:  rgba(255, 184, 0, 0.4);
+  --text-main:         #FFC933;
+  --text-muted:        #D4A62C;
+}
+
+/* Theme 4: 1990s Japanese Retro Console */
+[data-theme="retro"], body.theme-retro {
+  --bg-app:            #B8B4A8;
+  --bg-panel:          #C8C4B8;
+  --mashina-surface:   #CDC9BD;
+  --mashina-tile:      #D8D4C8;
+  --mashina-tile-press:#A8A498;
+  --mashina-line:      #8E8A7E;
+  --mashina-line-light:#9E9A8E;
+  --mashina-steel:     #706C62;
+  --mashina-metal:     #4A4E50;
+  --mashina-red:       #6C5CE7;
+  --mashina-red-glow:  rgba(108, 92, 231, 0.4);
+  --mashina-amber:     #A85A00;
+  --text-main:         #2D3436;
+  --text-muted:        #4A4E50;
+  --shadow-tile:       0 3px 0 #7A766A;
+}
+
+/* Theme 5: Machina Stealth Cyber */
+[data-theme="stealth"], body.theme-stealth {
+  --bg-app:            #05080A;
+  --bg-panel:          #0B1015;
+  --mashina-surface:   #0E151C;
+  --mashina-tile:      #121A22;
+  --mashina-tile-press:#080D12;
+  --mashina-line:      #1C2A38;
+  --mashina-line-light:#283D52;
+  --mashina-steel:     #385068;
+  --mashina-metal:     #608098;
+  --mashina-red:       #00F0FF;
+  --mashina-red-glow:  rgba(0, 240, 255, 0.45);
+  --text-main:         #E0F7FA;
+  --text-muted:        #789BB0;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  touch-action: none;
+  position: fixed;
+  inset: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 50% 0%, var(--mashina-red-glow) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-app) 100%);
+  position: relative;
+}
+
+/* Top Machinery Header */
+header.machina-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  padding-top: max(env(safe-area-inset-top, 0px), 8px);
+  padding-left: calc(12px + env(safe-area-inset-left, 0px));
+  padding-right: calc(12px + env(safe-area-inset-right, 0px));
+  background: var(--bg-panel);
+  border-bottom: 2px solid var(--mashina-line);
+  height: calc(44px + max(env(safe-area-inset-top, 0px), 8px));
+  flex-shrink: 0;
+  position: relative;
+  z-index: 100;
+}
+
+/* Fullscreen / Standalone mobile phone notch buffer */
+:fullscreen header.machina-header,
+:-webkit-full-screen header.machina-header {
+  padding-top: max(env(safe-area-inset-top, 0px), 14px);
+  height: calc(44px + max(env(safe-area-inset-top, 0px), 14px));
+}
+
+.brand-unit {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.brand-logo {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--text-main);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.brand-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background-color: var(--mashina-red);
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px var(--mashina-red-glow);
+}
+
+.brand-sub {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: var(--mashina-metal);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.slot-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mashina-cyan);
+  background: var(--mashina-tile-press);
+  border: 1px solid var(--mashina-line);
+  padding: 3px 6px;
+  border-radius: var(--radius-crisp);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+/* Mode Switcher Nav (5 Operational Modes) */
+.mode-nav {
+  display: flex;
+  gap: 2px;
+  background: var(--mashina-tile-press);
+  padding: 2px;
+  border: 1px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+}
+
+.mode-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--radius-crisp);
+}
+
+.mode-btn.active {
+  background: var(--mashina-tile);
+  color: var(--text-main);
+  border: 1px solid var(--mashina-red);
+  box-shadow: 0 0 6px var(--mashina-red-glow);
+}
+
+/* Header Telemetry & Quick Toolbars */
+.header-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.telemetry-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--mashina-tile-press);
+  color: var(--text-main);
+  padding: 3px 6px;
+  border: 1px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+  flex-shrink: 0;
+  min-width: 52px;
+  box-sizing: border-box;
+}
+
+#latency-val {
+  display: inline-block;
+  min-width: 32px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.led-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--mashina-steel);
+  box-shadow: 0 0 3px currentColor;
+}
+
+.led-indicator.online { background-color: var(--mashina-emerald); box-shadow: 0 0 5px var(--mashina-emerald); }
+.led-indicator.reconnecting { background-color: var(--mashina-amber); box-shadow: 0 0 5px var(--mashina-amber); }
+.led-indicator.offline { background-color: var(--mashina-red); box-shadow: 0 0 5px var(--mashina-red); }
+
+.action-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  padding: 3px 6px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-crisp);
+}
+
+.action-btn.active-tool {
+  border-color: var(--mashina-red);
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+/* Main Deck Work Area */
+main.deck-stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 8px calc(12px + env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) calc(12px + env(safe-area-inset-left, 0px));
+  width: 100%;
+}
+
+.deck-view {
+  width: 100%;
+  height: 100%;
+  display: none !important;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.deck-view.active {
+  opacity: 1;
+}
+
+/* ============================================================
+   DECK 0: DESKTOP COMMAND HUB (PC HOST & QR PAIRING CENTER)
+   ============================================================ */
+.deck-hub.active {
+  display: flex !important;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.hub-stage-grid {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* PC Host Only Elements (The Command Hub is strictly for PC Host monitor) */
+.is-mobile-client .pc-only,
+.is-mobile-client .mode-btn[data-mode="hub"],
+.is-mobile-client #deck-hub,
+.is-mobile-client #btn-qr-modal,
+.is-mobile-client #client-slot-badge {
+  display: none !important;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .pc-only,
+  .mode-btn[data-mode="hub"],
+  #deck-hub,
+  #btn-qr-modal,
+  #client-slot-badge {
+    display: none !important;
+  }
+}
+
+@media (max-height: 540px) {
+  .pc-only,
+  .mode-btn[data-mode="hub"],
+  #btn-qr-modal,
+  #client-slot-badge {
+    display: none !important;
+  }
+}
+
+/* Fullscreen Button — Prominent, touch-friendly hit box with cyan glow */
+.action-btn#btn-fullscreen {
+  min-width: 34px;
+  min-height: 34px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mashina-tile);
+  border: 1.5px solid var(--mashina-cyan);
+  color: var(--mashina-cyan);
+  border-radius: var(--radius-crisp);
+  flex-shrink: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.action-btn#btn-fullscreen:active {
+  background: var(--mashina-cyan);
+  color: #000000;
+  transform: scale(0.92);
+}
+
+.action-btn#btn-fullscreen svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* iOS Fullscreen Tip Banner */
+.ios-tip-banner {
+  position: fixed;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  width: calc(100% - 32px);
+  max-width: 420px;
+  animation: iosTipSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes iosTipSlideUp {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.ios-tip-card {
+  background: rgba(26, 24, 22, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid var(--mashina-cyan);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 240, 255, 0.2);
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text-main);
+}
+
+.ios-tip-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ios-tip-body {
+  flex: 1;
+}
+
+.ios-tip-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--mashina-cyan);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.ios-tip-text {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.ios-tip-text strong {
+  color: var(--text-main);
+}
+
+.ios-tip-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+.ios-tip-close:hover,
+.ios-tip-close:active {
+  color: #fff;
+}
+
+/* Hub PIN Edit Button */
+.hub-pin-edit-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--mashina-cyan);
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.hub-pin-edit-btn:hover {
+  border-color: var(--mashina-cyan);
+  box-shadow: 0 0 6px rgba(0, 240, 255, 0.3);
+}
+
+.hub-pin-code {
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .hub-stage-grid {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+}
+
+.hub-card {
+  background: var(--bg-panel);
+  border: 2px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-tile);
+  position: relative;
+}
+
+.hub-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--mashina-line);
+  padding-bottom: 6px;
+}
+
+.hub-tag {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--mashina-metal);
+  text-transform: uppercase;
+}
+
+.hub-status-live {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mashina-emerald);
+}
+
+.hub-latency-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mashina-emerald);
+  background: var(--mashina-tile-press);
+  padding: 2px 6px;
+  border: 1px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+}
+
+/* QR Hero Block */
+.hub-qr-hero {
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.hub-qr-frame {
+  background: #FFFFFF;
+  padding: 8px;
+  border-radius: var(--radius-crisp);
+  border: 2px solid var(--mashina-line);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.hub-qr-frame img {
+  display: block;
+  border-radius: 2px;
+}
+
+.hub-pin-banner {
+  background: var(--mashina-tile-press);
+  border: 1px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.hub-pin-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.hub-pin-code {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--mashina-amber);
+}
+
+.hub-instruction {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 4px 0 8px;
+}
+
+.hub-url-box {
+  display: flex;
+  width: 100%;
+  gap: 6px;
+}
+
+.hub-url-field {
+  flex: 1;
+  background: var(--mashina-tile-press);
+  border: 1px solid var(--mashina-line);
+  color: var(--mashina-cyan);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 5px 8px;
+  border-radius: var(--radius-crisp);
+  outline: none;
+}
+
+.hub-btn-action {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 0 10px;
+  cursor: pointer;
+  border-radius: var(--radius-crisp);
+}
+
+.hub-btn-action:active {
+  background: var(--mashina-red);
+  color: #FFF;
+}
+
+/* Controller Wireframe Visualizer */
+.hub-visualizer-card {
+  justify-content: space-between;
+}
+
+.hub-controller-wireframe {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0;
+  min-height: 220px;
+}
+
+.hub-wf-top {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  max-width: 480px;
+  margin-bottom: 8px;
+}
+
+.hub-wf-group {
+  display: flex;
+  gap: 6px;
+}
+
+.hub-wf-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-muted);
+  border-radius: var(--radius-crisp);
+  transition: all 0.08s ease;
+}
+
+.hub-wf-btn.active-press {
+  background: var(--mashina-red) !important;
+  color: #FFFFFF !important;
+  border-color: #FF5252 !important;
+  box-shadow: 0 0 8px var(--mashina-red-glow) !important;
+  transform: translateY(1px);
+}
+
+.hub-wf-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hub-wf-btn.meta-home {
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: var(--mashina-red);
+  color: var(--mashina-red);
+}
+
+.hub-wf-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  max-width: 480px;
+  background: var(--mashina-tile-press);
+  border: 2px solid var(--mashina-line);
+  border-radius: 18px;
+  padding: 16px 20px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.hub-wf-wing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Visualizer Joysticks */
+.hub-wf-stick {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hub-wf-stick-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--mashina-steel);
+  border: 1px solid var(--mashina-metal);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  transition: transform 0.04s ease-out;
+}
+
+/* Visualizer Dpad */
+.hub-wf-dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hub-wf-dpad-middle {
+  display: flex;
+  align-items: center;
+}
+
+.hub-wf-dpad-dir {
+  width: 18px;
+  height: 18px;
+  font-size: 8px;
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.08s ease;
+}
+
+.hub-wf-dpad-dir.active-press {
+  background: var(--mashina-cyan) !important;
+  color: #000000 !important;
+  border-color: #00F0FF !important;
+  box-shadow: 0 0 8px rgba(0,240,255,0.6) !important;
+}
+
+.hub-wf-dpad-center {
+  width: 16px;
+  height: 16px;
+  background: var(--mashina-tile);
+}
+
+/* Visualizer Face Buttons */
+.hub-wf-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hub-wf-face-middle {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.hub-wf-face-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-muted);
+  transition: all 0.08s ease;
+}
+
+.hub-wf-face-btn.active-press {
+  box-shadow: 0 0 10px currentColor !important;
+  transform: scale(1.15);
+  filter: brightness(1.4);
+}
+
+.hub-wf-face-btn.btn-y { color: #FFD700; }
+.hub-wf-face-btn.btn-x { color: #00B0FF; }
+.hub-wf-face-btn.btn-b { color: #FF5252; }
+.hub-wf-face-btn.btn-a { color: #00E676; }
+
+/* Visualizer Center HUD */
+.hub-wf-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hub-hud-brand {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.hub-hud-status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mashina-cyan);
+  margin: 4px 0;
+}
+
+.hub-hud-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.hub-hud-pad-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 5px 12px;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.hub-hud-pad-btn:hover {
+  border-color: var(--mashina-red);
+  color: #FFF;
+}
+
+/* Hub Diagnostics Footer */
+.hub-diag-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  border-top: 1px solid var(--mashina-line);
+  padding-top: 8px;
+  margin-top: 8px;
+  color: var(--text-muted);
+}
+
+.hub-diag-item strong {
+  display: inline-block;
+  margin-left: 3px;
+}
+
+/* ============================================================
+   DECK 1: GAMEPAD & MULTI-LAYOUT CONTROLLER
+   ============================================================ */
+.deck-gamepad.active {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.gamepad-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 34px;
+  padding: 0 4px;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.bumper-group {
+  display: flex;
+  gap: 6px;
+  position: relative;
+  z-index: 10;
+  border-radius: var(--radius-crisp);
+  transform-origin: center center;
+}
+
+.hw-bumper, .hw-trigger {
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 16px;
+  box-shadow: 0 2px 0 #000000;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+  touch-action: none;
+  transition: transform 0.04s ease, background 0.04s ease;
+}
+
+.hw-bumper:active, .hw-bumper.pressed,
+.hw-trigger:active, .hw-trigger.pressed {
+  transform: translateY(2px);
+  box-shadow: none;
+  background: var(--mashina-red);
+  border-color: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+.center-meta-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta-pill-btn {
+  background: var(--bg-panel);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 8px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 0 #000000;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+}
+
+.meta-pill-btn:active, .meta-pill-btn.pressed {
+  transform: translateY(1px);
+  box-shadow: none;
+  color: var(--text-main);
+  border-color: var(--mashina-red);
+}
+
+.home-badge-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-panel);
+  border: 2px solid var(--mashina-red);
+  color: var(--mashina-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 13px;
+  box-shadow: 0 0 8px var(--mashina-red-glow);
+  cursor: pointer;
+}
+
+.home-badge-btn:active, .home-badge-btn.pressed {
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+/* Controller Sub-Layout Switcher Bar */
+.layout-selector-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--mashina-tile-press);
+  padding: 2px 6px;
+  border-radius: 12px;
+  border: 1px solid var(--mashina-line);
+}
+
+.layout-opt {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.layout-opt.active {
+  background: var(--mashina-red);
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.gamepad-middle-zone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex: 1;
+  padding: 2px 10px;
+}
+
+.controller-wing-left, .controller-wing-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Authentic Ergonomic Offsets for Gamepad Wings */
+/* Xbox: Asymmetrical (Left stick raised, D-pad lowered; Right stick lowered, Face diamond raised) */
+.layout-xbox #ctrl-wing-left .joystick-pod-wrapper,
+.layout-xbox #ctrl-wing-left #joystick-left-pod {
+  transform: translateY(-16px);
+}
+.layout-xbox #ctrl-wing-left #dpad-container {
+  transform: translateY(16px);
+}
+.layout-xbox #ctrl-wing-right .joystick-pod-wrapper,
+.layout-xbox #ctrl-wing-right #joystick-right-pod {
+  transform: translateY(16px);
+}
+.layout-xbox #ctrl-wing-right #face-diamond-container {
+  transform: translateY(-16px);
+}
+
+/* PlayStation: Symmetrical Lower-Inside (D-pad raised, Left stick lowered; Right stick lowered, Symbols raised) */
+.layout-ps #ctrl-wing-left #dpad-container {
+  transform: translateY(-16px);
+}
+.layout-ps #ctrl-wing-left .joystick-pod-wrapper,
+.layout-ps #ctrl-wing-left #joystick-left-pod {
+  transform: translateY(16px);
+}
+.layout-ps #ctrl-wing-right .joystick-pod-wrapper,
+.layout-ps #ctrl-wing-right #joystick-right-pod {
+  transform: translateY(16px);
+}
+.layout-ps #ctrl-wing-right #face-diamond-container {
+  transform: translateY(-16px);
+}
+
+.joystick-pod-wrapper {
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* In dynamic floating joystick mode, soften in-flow pods so screen feels open and uncluttered */
+.dynamic-joysticks-active .joystick-pod-wrapper {
+  opacity: 0.2;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.dynamic-joysticks-active .joystick-pod {
+  pointer-events: none;
+}
+
+/* PlayStation Central Touchpad & DualSense Wing Styles */
+.ps-center-touchpad-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.ps-touchpad-btn {
+  width: 180px;
+  height: 68px;
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  border-radius: 8px 8px 14px 14px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), var(--shadow-tile);
+  cursor: pointer;
+  touch-action: none;
+  transition: all 0.05s ease;
+}
+
+.ps-touchpad-btn:active, .ps-touchpad-btn.pressed {
+  background: var(--mashina-red);
+  color: #FFFFFF;
+  border-color: var(--mashina-red);
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
+}
+
+.ps-touchpad-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* D-Pad Machined Bevels (3x3 CSS Grid) */
+.dpad-cross {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  width: 132px;
+  height: 132px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.dpad-btn {
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  color: var(--text-main);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 0 #000000;
+  touch-action: none;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.dpad-btn.up {
+  grid-column: 2;
+  grid-row: 1;
+  border-radius: 6px 6px 0 0;
+  border-bottom: none;
+}
+.dpad-btn.left {
+  grid-column: 1;
+  grid-row: 2;
+  border-radius: 6px 0 0 6px;
+  border-right: none;
+}
+.dpad-center-hub {
+  grid-column: 2;
+  grid-row: 2;
+  background: var(--mashina-tile);
+  border: none;
+}
+.dpad-btn.right {
+  grid-column: 3;
+  grid-row: 2;
+  border-radius: 0 6px 6px 0;
+  border-left: none;
+}
+.dpad-btn.down {
+  grid-column: 2;
+  grid-row: 3;
+  border-radius: 0 0 6px 6px;
+  border-top: none;
+}
+
+.dpad-btn:active, .dpad-btn.pressed {
+  background: var(--mashina-red);
+  color: #FFFFFF;
+  box-shadow: none;
+  transform: translateY(1px);
+}
+
+/* Analog Joystick Pods */
+.joystick-pod {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--mashina-surface) 0%, var(--mashina-tile-press) 100%);
+  border: 2px solid var(--mashina-line);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.8);
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.joystick-thumb {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--mashina-tile) 0%, var(--mashina-tile-press) 100%);
+  border: 2px solid var(--mashina-steel);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(0px, 0px);
+  will-change: transform;
+}
+
+/* Face Buttons Diamond (3x3 CSS Grid) */
+.face-diamond {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  width: 132px;
+  height: 132px;
+  flex-shrink: 0;
+  position: relative;
+  align-items: center;
+  justify-items: center;
+  box-sizing: border-box;
+}
+
+.face-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 0 #000000;
+  touch-action: none;
+  cursor: pointer;
+  transition: transform 0.04s ease;
+  box-sizing: border-box;
+}
+
+.face-btn.btn-y, .face-btn.pos-top { grid-column: 2; grid-row: 1; color: #FFD700; border-color: #665520; }
+.face-btn.btn-a, .face-btn.pos-bottom { grid-column: 2; grid-row: 3; color: #00E676; border-color: #206635; }
+.face-btn.btn-x, .face-btn.pos-left { grid-column: 1; grid-row: 2; color: #00B0FF; border-color: #205066; }
+.face-btn.btn-b, .face-btn.pos-right { grid-column: 3; grid-row: 2; color: #FF5252; border-color: #662020; }
+
+.face-btn:active, .face-btn.pressed {
+  transform: translateY(2px);
+  box-shadow: none;
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+/* ============================================================
+   DECK 2: STREAM DECK / MACRO PAD (12 MACHINED TILES)
+   ============================================================ */
+.deck-stream.active {
+  display: block !important;
+  width: 100%;
+  height: 100%;
+}
+
+.macro-grid-12 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.macro-tile {
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-tile);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.05s ease, border-color 0.1s ease;
+}
+
+.macro-tile:active, .macro-tile.pressed {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-press);
+  background: var(--mashina-tile-press);
+  border-color: var(--mashina-red);
+}
+
+.tile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tile-icon {
+  display: flex;
+  align-items: center;
+}
+
+.tile-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mashina-steel);
+}
+
+.macro-tile.active-state .tile-led {
+  background: var(--mashina-emerald);
+  box-shadow: 0 0 8px var(--mashina-emerald);
+}
+
+.tile-bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+.tile-label {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-main);
+}
+
+.tile-key-bind {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--mashina-metal);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   DECK 3: TRACKPAD & NUMPAD
+   ============================================================ */
+.deck-trackpad.active {
+  display: grid !important;
+  grid-template-columns: 2.4fr 1fr;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+}
+
+.deck-trackpad.mode-full {
+  grid-template-columns: 1fr !important;
+}
+
+.deck-trackpad.mode-full .numpad-container {
+  display: none !important;
+}
+
+.trackpad-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 28px;
+  padding: 0 4px;
+}
+
+.trackpad-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.trackpad-toggle-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--mashina-cyan);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+  transition: all 0.08s ease;
+}
+
+.trackpad-toggle-btn:hover, .trackpad-toggle-btn:active {
+  background: var(--mashina-cyan);
+  color: #000000;
+}
+
+/* Hub Driver & In-Game Prompts Banner */
+.hub-driver-card {
+  background: var(--mashina-tile-press);
+  border: 1px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+  padding: 10px 12px;
+  margin-top: 10px;
+}
+
+.hub-driver-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.hub-driver-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mashina-amber);
+}
+
+.hub-driver-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0 0 8px 0;
+}
+
+.hub-driver-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hub-btn-driver {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--mashina-cyan);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: var(--radius-crisp);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.08s ease;
+}
+
+.hub-btn-driver:hover {
+  background: var(--mashina-cyan);
+  color: #000000;
+  border-color: var(--mashina-cyan);
+}
+
+.hub-driver-note {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.trackpad-surface-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.trackpad-surface {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 2px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+  position: relative;
+  touch-action: none;
+  box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trackpad-hint {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--mashina-steel);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.trackpad-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  height: 44px;
+}
+
+.track-btn {
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-tile);
+  cursor: pointer;
+  border-radius: var(--radius-crisp);
+}
+
+.track-btn:active, .track-btn.pressed {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-press);
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+.numpad-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 6px;
+  height: 100%;
+}
+
+.num-key {
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-tile);
+  cursor: pointer;
+  border-radius: var(--radius-crisp);
+}
+
+.num-key:active, .num-key.pressed {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-press);
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+.num-key.enter-key {
+  grid-row: span 2;
+  background: #19241A;
+  border-color: #284D2C;
+  color: #00E676;
+}
+
+.num-key.zero-key {
+  grid-column: span 2;
+}
+
+.num-key.backspace-key {
+  color: var(--mashina-amber);
+  font-size: 18px;
+}
+
+/* ============================================================
+   DECK 4: PRESENTATION REMOTE (Timer + Teleprompter + Remote)
+   ============================================================ */
+.deck-present.active {
+  display: flex !important;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.pres-deck-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-panel);
+  border: 1px solid var(--mashina-line);
+  padding: 4px 10px;
+  border-radius: var(--radius-crisp);
+  flex-shrink: 0;
+}
+
+.pres-timer-unit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pres-timer-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.pres-timer-digits {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--mashina-emerald);
+  letter-spacing: 0.06em;
+  min-width: 78px;
+}
+
+.pres-timer-digits.warning {
+  color: var(--mashina-amber);
+}
+
+.pres-timer-digits.overdue {
+  color: #FF5252;
+  animation: timerBlink 1s infinite;
+}
+
+@keyframes timerBlink {
+  50% { opacity: 0.4; }
+}
+
+.pres-timer-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timer-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+}
+
+.timer-btn:active {
+  transform: translateY(1px);
+}
+
+.timer-select {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--mashina-metal);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 4px;
+  border-radius: var(--radius-crisp);
+  outline: none;
+}
+
+.prompter-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #141824;
+  border: 1px solid #2B3A67;
+  color: #82B1FF;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.prompter-toggle-btn:active, .prompter-toggle-btn.active {
+  background: #2B3A67;
+  color: #FFFFFF;
+}
+
+.presentation-stage-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.pres-giant-btn {
+  background: var(--mashina-tile);
+  border: 3px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 0 #000000;
+  cursor: pointer;
+  touch-action: none;
+  position: relative;
+  z-index: 5;
+  transform-origin: center center;
+}
+
+.pres-giant-btn .pres-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pres-giant-btn:active, .pres-giant-btn.pressed {
+  transform: translateY(3px);
+  box-shadow: var(--shadow-press);
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+.pres-aux-controls {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  height: 40px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 5;
+  transform-origin: center center;
+}
+
+.pres-aux-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-tile);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+}
+
+.pres-aux-btn:active, .pres-aux-btn.pressed {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-press);
+  border-color: var(--mashina-red);
+  color: var(--mashina-red);
+}
+
+/* Teleprompter Overlay Drawer */
+.prompter-drawer {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 10, 9, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid var(--mashina-line);
+  border-radius: var(--radius-crisp);
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+}
+
+.prompter-drawer.active {
+  display: flex !important;
+}
+
+.prompter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--mashina-line);
+  flex-shrink: 0;
+}
+
+.prompter-title {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: var(--mashina-metal);
+}
+
+.prompter-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.prompter-ctrl-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+}
+
+.prompter-ctrl-btn:active {
+  background: var(--mashina-red);
+  color: #FFF;
+}
+
+.prompter-speed-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--mashina-cyan);
+  padding: 0 4px;
+}
+
+.prompter-body {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+.prompter-scroll-view {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px 20px 100px 20px;
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.6;
+  color: #FFFFFF;
+  font-weight: 600;
+  scroll-behavior: smooth;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.prompter-scroll-view.mirror {
+  transform: scaleX(-1);
+}
+
+.prompter-scroll-view p {
+  margin-bottom: 14px;
+}
+
+.prompter-editor {
+  width: 100%;
+  height: 100%;
+  background: #0E0D0C;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 14px;
+  border: none;
+  outline: none;
+  resize: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+
+/* ============================================================
+   DECK 5: FULL PC QWERTY KEYBOARD
+   ============================================================ */
+.deck-keyboard.active {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+}
+
+.keyboard-live-input-bar {
+  display: flex;
+  gap: 8px;
+  height: 34px;
+  flex-shrink: 0;
+}
+
+.kb-input-field {
+  flex: 1;
+  background: var(--mashina-tile-press);
+  border: 2px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 0 10px;
+  border-radius: var(--radius-crisp);
+  outline: none;
+}
+
+.kb-input-field:focus {
+  border-color: var(--mashina-red);
+}
+
+.kb-send-btn {
+  background: var(--mashina-red);
+  border: none;
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 14px;
+  cursor: pointer;
+  border-radius: var(--radius-crisp);
+  text-transform: uppercase;
+}
+
+.keyboard-rows-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.kb-row {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  flex: 1;
+}
+
+.kb-key {
+  flex: 1;
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 0 #000000;
+  cursor: pointer;
+  border-radius: var(--radius-crisp);
+  touch-action: none;
+}
+
+.kb-key:active, .kb-key.pressed {
+  transform: translateY(1px);
+  box-shadow: none;
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+.kb-key.key-wide { flex: 1.5; font-size: 10px; }
+.kb-key.key-space { flex: 4; }
+.kb-key.key-mod.active-mod {
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+/* Drag & Scale Layout Customizer Toolbar */
+.layout-edit-toolbar {
+  position: fixed;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  max-width: 95vw;
+}
+
+.edit-toolbar-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--mashina-surface);
+  border: 2px solid var(--mashina-red);
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.7), 0 0 10px var(--mashina-red-glow);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-main);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.edit-toolbar-title {
+  font-weight: 800;
+  color: var(--mashina-red);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.edit-scale-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--mashina-tile-press);
+  padding: 2px 6px;
+  border-radius: 12px;
+  border: 1px solid var(--mashina-line);
+}
+
+.edit-tool-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-weight: 900;
+  font-size: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.edit-tool-btn:active {
+  background: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+.scale-indicator {
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 34px;
+  text-align: center;
+  color: var(--mashina-amber);
+}
+
+.edit-tool-action {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.edit-tool-action.save {
+  background: #19241A;
+  border-color: #284D2C;
+  color: #00E676;
+}
+
+.edit-tool-action.reset {
+  background: #2A1515;
+  border-color: #662020;
+  color: #FF5252;
+}
+
+.edit-tool-action.done {
+  background: var(--mashina-red);
+  border-color: var(--mashina-red);
+  color: #FFFFFF;
+}
+
+.edit-tool-action:active {
+  transform: translateY(1px);
+}
+
+/* Edit Mode Visual Draggable Elements */
+body.edit-mode-active .customizer-draggable {
+  border: 2px dashed var(--mashina-red) !important;
+  cursor: grab !important;
+  user-select: none !important;
+  touch-action: none !important;
+}
+
+body.edit-mode-active .bumper-group {
+  padding: 2px 3px;
+  background: rgba(255, 42, 42, 0.05);
+}
+
+body.edit-mode-active .pres-giant-btn,
+body.edit-mode-active .pres-aux-controls {
+  position: relative;
+  z-index: 20;
+}
+
+body.edit-mode-active .customizer-draggable:active {
+  cursor: grabbing !important;
+}
+
+body.edit-mode-active .customizer-selected {
+  outline: 3px solid var(--mashina-amber) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 14px var(--mashina-amber) !important;
+}
+
+/* Dynamic Floating Joystick Overlay (Direct-to-Body Viewport Overlay) */
+.dynamic-floating-pod {
+  position: fixed !important;
+  width: 120px !important;
+  height: 120px !important;
+  border-radius: 50% !important;
+  border: 2px solid var(--mashina-red, #ff2a2a) !important;
+  background: radial-gradient(circle, rgba(255, 42, 42, 0.12) 0%, rgba(20, 20, 20, 0.90) 70%) !important;
+  box-shadow: 0 0 26px var(--mashina-red-glow, rgba(255, 42, 42, 0.45)), inset 0 2px 8px rgba(0, 0, 0, 0.85) !important;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none !important;
+  z-index: 99999 !important;
+  transform: translate(-50%, -50%) !important;
+  will-change: transform, left, top;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.dynamic-floating-pod.active {
+  display: flex !important;
+}
+
+.dynamic-floating-ring {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  pointer-events: none !important;
+}
+
+.dynamic-floating-thumb {
+  position: absolute;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 35%, #555555, #141414) !important;
+  border: 2px solid var(--mashina-line, #333333) !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.85) !important;
+  pointer-events: none !important;
+  transform: translate(0px, 0px);
+  will-change: transform;
+}
+
+.dynamic-floating-thumb::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--mashina-red, #ff2a2a);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px var(--mashina-red-glow, rgba(255, 42, 42, 0.5));
+}
+
+/* Modals (Pairing, Key Customizer & Settings) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-card {
+  background: var(--bg-panel);
+  border: 3px solid var(--mashina-red);
+  box-shadow: 8px 8px 0 #000000;
+  padding: 20px;
+  max-width: 460px;
+  width: 92%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--mashina-line);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--mashina-metal);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.form-input, .form-select {
+  background: var(--mashina-tile-press);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 6px 8px;
+  border-radius: var(--radius-crisp);
+  outline: none;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--mashina-red);
+}
+
+.theme-pill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.theme-opt-btn {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: var(--radius-crisp);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.05s ease, border-color 0.1s ease;
+}
+
+.theme-opt-btn:active {
+  transform: translateY(1px);
+}
+
+.theme-opt-btn[data-theme="charcoal"] {
+  background: #161413;
+  color: #F4F1EA;
+  border-color: #3C3935;
+}
+
+.theme-opt-btn[data-theme="paper"] {
+  background: #FFFFFF;
+  color: #141312;
+  border-color: #C8C1B0;
+}
+
+.theme-opt-btn[data-theme="amber"] {
+  background: #141208;
+  color: #FFB800;
+  border-color: #4A3D14;
+}
+
+.theme-opt-btn[data-theme="retro"] {
+  background: #D8D4C8;
+  color: #2D3436;
+  border-color: #8E8A7E;
+}
+
+.theme-opt-btn[data-theme="stealth"] {
+  background: #0B1015;
+  color: #00F0FF;
+  border-color: #1C2A38;
+}
+
+.theme-opt-btn.active {
+  box-shadow: 0 0 0 2px var(--mashina-red);
+}
+
+/* Settings Modal Specific Styles */
+.settings-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.settings-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Orientation Banner (High-Contrast Tactical Hardware Pill) */
+.orientation-banner {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #141312 !important;
+  border: 2px solid #FFB800 !important;
+  color: #F4F1EA !important;
+  padding: 10px 18px;
+  border-radius: var(--radius-crisp);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.orient-text {
+  color: #FFC933 !important;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.orient-dismiss {
+  background: transparent;
+  border: none;
+  color: #8A8F98 !important;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.1s ease;
+}
+
+.orient-dismiss:hover {
+  color: #FFFFFF !important;
+}
+
+.kb-mobile-utility-bar {
+  display: none;
+}
+
+/* Landscape on Mobile Phones (e.g. iPhone Mini / SE with viewport height <= 450px) */
+@media (max-height: 450px) and (orientation: landscape) {
+  header.machina-header {
+    height: calc(36px + env(safe-area-inset-top, 0px)) !important;
+    padding-top: max(env(safe-area-inset-top, 0px), 3px) !important;
+    padding-bottom: 3px !important;
+    padding-left: max(env(safe-area-inset-left, 0px), 14px) !important;
+    padding-right: max(env(safe-area-inset-right, 0px), 14px) !important;
+  }
+
+  .mode-nav {
+    gap: 2px;
+    padding: 1px;
+  }
+
+  .mode-btn {
+    padding: 4px 6px;
+  }
+
+  .brand-sub {
+    display: none !important;
+  }
+
+  .brand-logo {
+    font-size: 11px;
+  }
+
+  .action-btn#btn-fullscreen {
+    min-width: 32px;
+    min-height: 32px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ============================================================
+   PORTRAIT ORIENTATION ADAPTATION RULES
+   ============================================================ */
+@media (orientation: portrait), (max-width: 600px) {
+  header.machina-header {
+    height: auto;
+    padding-top: max(env(safe-area-inset-top, 0px), 10px) !important;
+    padding-bottom: 6px !important;
+    padding-left: max(env(safe-area-inset-left, 0px), 10px) !important;
+    padding-right: max(env(safe-area-inset-right, 0px), 10px) !important;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .mode-nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+
+  .mode-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 4px;
+    font-size: 10px;
+    gap: 3px;
+  }
+
+  .brand-sub {
+    display: none !important;
+  }
+
+  .brand-logo {
+    font-size: 12px;
+  }
+
+  /* Gamepad Deck in Portrait: Ergonomic Lateral Left & Right Thumb Columns */
+  .gamepad-top-row {
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+  }
+
+  .gamepad-top-row .bumper-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .hw-bumper, .hw-trigger {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+
+  .center-meta-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .layout-selector-bar {
+    padding: 2px 4px;
+    gap: 2px;
+  }
+
+  .layout-opt {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+
+  .meta-pill-btn {
+    font-size: 8px;
+    padding: 2px 6px;
+  }
+
+  .home-badge-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .deck-gamepad.active {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    width: 100%;
+    height: 100%;
+  }
+
+  .gamepad-middle-zone {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    gap: 8px;
+    padding: 6px 4px 14px 4px;
+    flex: 1;
+    width: 100%;
+    margin-top: auto;
+    position: relative;
+  }
+
+  .controller-wing-left {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    width: 48% !important;
+    height: auto !important;
+    gap: 14px;
+  }
+
+  .controller-wing-right {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    width: 48% !important;
+    height: auto !important;
+    gap: 14px;
+  }
+
+  .ps-center-touchpad-zone {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+  }
+
+  .ps-touchpad-btn {
+    width: 100px;
+    height: 40px;
+    font-size: 8px;
+  }
+
+  .ps-touchpad-meta {
+    gap: 6px;
+  }
+
+  .dpad-cross, .face-diamond, .joystick-pod, .joystick-pod-wrapper {
+    width: 130px !important;
+    height: 130px !important;
+    flex-shrink: 0;
+  }
+
+  .face-btn {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 16px !important;
+  }
+
+  .joystick-thumb {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  /* Macro Deck in Portrait: 3 Columns x 4 Rows */
+  .macro-grid-12 {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .macro-tile {
+    padding: 6px 8px;
+  }
+
+  .tile-label {
+    font-size: 10px;
+  }
+
+  .tile-key-bind {
+    font-size: 8px;
+  }
+
+  /* Trackpad Deck in Portrait: Stack Vertically */
+  .deck-trackpad.active {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1.1fr 1fr;
+    gap: 8px;
+  }
+
+  /* Presentation Deck in Portrait */
+  .pres-deck-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .pres-timer-unit {
+    justify-content: space-between;
+  }
+
+  .presentation-stage-hero {
+    gap: 8px;
+  }
+
+  .pres-giant-btn .pres-title {
+    font-size: 12px;
+  }
+
+  .pres-aux-controls {
+    grid-template-columns: repeat(4, 1fr);
+    height: auto;
+    gap: 4px;
+  }
+
+  .pres-aux-btn {
+    padding: 6px 2px;
+    font-size: 8px;
+  }
+
+  /* Keyboard Deck in Portrait: Human-Proportioned Docked Keys */
+  .deck-keyboard.active {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 6px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .keyboard-live-input-bar {
+    height: 42px;
+    flex-shrink: 0;
+    gap: 6px;
+  }
+
+  .kb-input-field {
+    font-size: 13px;
+    padding: 0 10px;
+  }
+
+  .kb-send-btn {
+    font-size: 11px;
+    padding: 0 12px;
+  }
+
+  .kb-mobile-utility-bar {
+    display: flex;
+    gap: 3px;
+    width: 100%;
+    margin-bottom: 2px;
+    flex-shrink: 0;
+  }
+
+  .kb-util-btn {
+    flex: 1;
+    background: var(--mashina-tile);
+    border: 1px solid var(--mashina-line);
+    color: var(--text-main);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 6px 1px;
+    border-radius: var(--radius-crisp);
+    cursor: pointer;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .kb-util-btn:active {
+    background: var(--mashina-red);
+    color: #FFFFFF;
+  }
+
+  .keyboard-rows-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: none;
+    margin-top: auto;
+    width: 100%;
+  }
+
+  .kb-row {
+    display: flex;
+    gap: 3px;
+    width: 100%;
+    height: 42px;
+    min-height: 40px;
+    max-height: 46px;
+    flex: none;
+  }
+
+  .kb-key {
+    flex: 1;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 0 1px;
+    border-radius: var(--radius-crisp);
+    box-shadow: 0 2px 0 #000000;
+  }
+
+  .kb-key.key-wide {
+    flex: 1.4;
+    font-size: 9px;
+  }
+
+  .kb-key.key-space {
+    flex: 3.5;
+  }
+}
+
+/* ─── MULTIPLAYER LOBBY & DYNAMIC PLAYER THEMING ────────────── */
+:root {
+  --player-accent: var(--mashina-cyan);
+  --player-glow: rgba(0, 240, 255, 0.35);
+}
+
+/* Dynamic theming on active controllers */
+[data-player-color] .hud-status,
+[data-player-color] .stick-dot,
+[data-player-color] .track-dot {
+  background: var(--player-accent) !important;
+  box-shadow: 0 0 10px var(--player-glow) !important;
+}
+
+[data-player-color] .analog-stick,
+[data-player-color] .face-btn:active,
+[data-player-color] .dpad-btn:active {
+  border-color: var(--player-accent) !important;
+}
+
+/* Header Player Slot Badge */
+.player-slot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--mashina-tile-press);
+  border: 1px solid var(--player-accent, var(--mashina-line));
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--player-glow, transparent);
+  transition: all 0.15s ease;
+}
+
+.player-slot-badge:hover {
+  background: var(--mashina-surface);
+  border-color: var(--text-main);
+}
+
+.player-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--player-accent, var(--mashina-cyan));
+  box-shadow: 0 0 6px var(--player-accent, var(--mashina-cyan));
+}
+
+/* Lobby Modal */
+.lobby-modal-card {
+  max-width: 440px;
+  width: 94%;
+}
+
+.lobby-header-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--player-accent, var(--mashina-cyan));
+  box-shadow: 0 0 8px var(--player-accent, var(--mashina-cyan));
+}
+
+.lobby-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 6px 0 14px;
+}
+
+.lobby-section-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Slot Selection Grid */
+.lobby-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 420px) {
+  .lobby-slots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.lobby-slot-card {
+  background: var(--mashina-tile);
+  border: 2px solid var(--mashina-line);
+  padding: 8px 6px;
+  text-align: center;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.lobby-slot-card:hover:not(.taken) {
+  border-color: var(--mashina-metal);
+  background: var(--mashina-surface);
+}
+
+.lobby-slot-card.selected {
+  border-color: var(--selected-color, var(--mashina-cyan));
+  box-shadow: 0 0 10px var(--selected-glow, rgba(0, 240, 255, 0.4));
+  background: var(--mashina-surface);
+}
+
+.lobby-slot-card.taken {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: #333333;
+  background: #121212;
+}
+
+.slot-card-id {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--text-main);
+  display: block;
+}
+
+.slot-card-status {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 2px;
+  display: block;
+  color: var(--mashina-emerald);
+}
+
+.lobby-slot-card.taken .slot-card-status {
+  color: var(--mashina-red);
+}
+
+.slot-card-pilot {
+  font-size: 9px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Form Groups */
+.lobby-form-group {
+  margin-bottom: 14px;
+}
+
+.lobby-input {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 10px;
+  background: var(--mashina-tile-press);
+  border: 1px solid var(--mashina-line);
+  color: var(--text-main);
+  border-radius: var(--radius-crisp);
+}
+
+.lobby-input:focus {
+  border-color: var(--player-accent, var(--mashina-cyan));
+  outline: none;
+}
+
+/* Color Palette Swatches */
+.lobby-palette {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.lobby-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+}
+
+.lobby-swatch:hover {
+  transform: scale(1.15);
+}
+
+.lobby-swatch.active {
+  border-color: #FFFFFF;
+  box-shadow: 0 0 10px var(--swatch-color);
+  transform: scale(1.2);
+}
+
+/* Error Banner */
+.lobby-error-banner {
+  background: rgba(200, 16, 46, 0.15);
+  border: 1px solid var(--mashina-red);
+  color: var(--mashina-red);
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: var(--radius-crisp);
+  margin-bottom: 12px;
+}
+
+/* Join Button */
+.lobby-join-btn {
+  width: 100%;
+  padding: 12px 0;
+  background: var(--mashina-red);
+  color: #FFFFFF;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: var(--radius-crisp);
+  cursor: pointer;
+  box-shadow: 0 3px 0 #000000;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+
+.lobby-join-btn:hover:not(:disabled) {
+  background: #E51837;
+}
+
+.lobby-join-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #000000;
+}
+
+.lobby-join-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Desktop Hub Multiplayer Bay Cards */
+.hub-multiplayer-card {
+  margin-top: 14px;
+}
+
+.hub-players-active-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mashina-cyan);
+}
+
+.hub-player-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .hub-player-slots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.hub-pilot-bay {
+  background: var(--mashina-tile);
+  border: 1px solid var(--mashina-line);
+  padding: 10px;
+  border-radius: var(--radius-crisp);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hub-pilot-bay.connected {
+  border-color: var(--bay-color, var(--mashina-cyan));
+  box-shadow: 0 0 10px var(--bay-glow, rgba(0, 240, 255, 0.25));
+}
+
+.hub-pilot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.hub-pilot-tag {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--bay-color, var(--text-muted));
+}
+
+.hub-pilot-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #555555;
+}
+
+.hub-pilot-bay.connected .hub-pilot-status-dot {
+  background: var(--bay-color, var(--mashina-emerald));
+  box-shadow: 0 0 6px var(--bay-color, var(--mashina-emerald));
+}
+
+.hub-pilot-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.hub-pilot-bay:not(.connected) .hub-pilot-name {
+  color: var(--text-muted);
+}
+
+.hub-pilot-activity {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  height: 14px;
+}
+
+.hub-pilot-activity.active-press {
+  color: var(--bay-color, var(--mashina-cyan));
+  font-weight: 700;
+}
