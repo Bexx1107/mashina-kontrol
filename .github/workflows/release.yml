@@ -1,0 +1,57 @@
+name: Build & Release Desktop App
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile macOS native input helper (if on macOS runner)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p server/bin
+          clang -framework ApplicationServices -framework CoreGraphics -O2 -o server/bin/kontrol-macinput server/src/KontrolMacInput.c
+
+      - name: Build & Package Desktop Application
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            npm run build:win
+          else
+            npm run build:mac
+          fi
+        shell: bash
+
+      - name: Upload Artifacts to GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

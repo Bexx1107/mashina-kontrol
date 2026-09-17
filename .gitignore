@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Production builds
+dist/
+0RELEASE/
+
+# Logs & Runtime states
+*.log
+daemon.log
+.pin
+presets.json
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment / Scratch
+.env
+scratch/
+*.tmp

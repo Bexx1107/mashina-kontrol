@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="charcoal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mashina Kontrol">
+  <meta name="theme-color" content="#141312">
+  <title>MASHINA KONTROL · Virtual Gamepad & Macro Deck</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="./icon-512.png">
+  <link rel="stylesheet" href="./kontrol.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=IBM+Plex+Mono:wght@500;600;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '[::1]';
+      var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+      if (!isLocal || isTouch) {
+        document.documentElement.classList.add('is-mobile-client');
+      } else {
+        document.documentElement.classList.add('is-pc-host');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- Machinery Header -->
+    <header class="machina-header">
+      <div class="brand-unit">
+        <span class="brand-logo">MASHINA</span>
+        <span class="brand-dot"></span>
+        <span class="brand-sub">KONTROL</span>
+      </div>
+
+      <!-- Mode Selector (6 Modular Decks including Desktop Hub) -->
+      <nav class="mode-nav">
+        <button class="mode-btn pc-only" data-mode="hub" title="Desktop Command Hub & QR Center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Hub</span>
+        </button>
+        <button class="mode-btn active" data-mode="gamepad" title="Gamepad (Xbox / PlayStation / SNES)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="4"></rect><path d="M6 12h4m-2-2v4"></path><circle cx="15" cy="11" r="1" fill="currentColor"></circle><circle cx="18" cy="13" r="1" fill="currentColor"></circle></svg>
+          <span>Pad</span>
+        </button>
+        <button class="mode-btn" data-mode="keyboard" title="Full QWERTY PC Keyboard">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M8 16h8"></path></svg>
+          <span>Keys</span>
+        </button>
+        <button class="mode-btn" data-mode="stream" title="12-Tile Macro Deck">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+          <span>Deck</span>
+        </button>
+        <button class="mode-btn" data-mode="trackpad" title="Trackpad & 10-Key Numpad">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="7"></rect><path d="M12 6v4"></path></svg>
+          <span>Trackpad</span>
+        </button>
+        <button class="mode-btn" data-mode="present" title="Presentation Remote">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20v14H2z"></path><path d="M8 21h8m-4-4v4"></path><path d="m10 8 5 3-5 3V8z"></path></svg>
+          <span>Remote</span>
+        </button>
+      </nav>
+
+      <!-- Telemetry & Actions -->
+      <div class="header-telemetry">
+        <button class="action-btn pwa-badge-btn" id="btn-pwa-install" title="Install Standalone PWA App" style="display: none;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>INSTALL</span>
+        </button>
+        <button class="player-slot-badge" id="player-badge" title="Lobby / Player Slot Selector" style="display: none;">
+          <span class="player-dot" id="player-dot"></span>
+          <span id="player-label">P1 · Player 1</span>
+        </button>
+        <span class="slot-badge" id="client-slot-badge" title="Multi-device Phone Connections (Up to 8)">1/8</span>
+        <button class="action-btn" id="btn-theme-modal" title="Change Hardware Theme">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 10 10 0 0 0 0-20"></path></svg>
+        </button>
+        <button class="action-btn" id="btn-edit-mode" title="Toggle Button Rebind Mode">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+        </button>
+        <div class="telemetry-pill">
+          <span class="led-indicator offline" id="led-status"></span>
+          <span id="latency-val">--</span>
+        </div>
+        <button class="action-btn" id="btn-qr-modal" title="Pairing info">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M12 18h.01"></path></svg>
+        </button>
+        <button class="action-btn" id="btn-fullscreen" title="Fullscreen">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- iOS Safari Fullscreen / PWA Installation Tip Banner -->
+    <div id="ios-fullscreen-tip" class="ios-tip-banner" style="display: none;">
+      <div class="ios-tip-card">
+        <div class="ios-tip-icon">📱</div>
+        <div class="ios-tip-body">
+          <div class="ios-tip-title">100% Fullscreen on iPhone</div>
+          <div class="ios-tip-text">
+            To remove Safari's browser bar and get true edge-to-edge fullscreen: Tap <strong>Share</strong> ( <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align: middle;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg> ) → <strong>"Add to Home Screen"</strong>.
+          </div>
+        </div>
+        <button type="button" class="ios-tip-close" id="ios-tip-close" title="Dismiss">✕</button>
+      </div>
+    </div>
+
+    <!-- Drag & Scale Layout Customizer Bar (Active during Edit Mode) -->
+    <div id="layout-edit-toolbar" class="layout-edit-toolbar" style="display: none;">
+      <div class="edit-toolbar-pill">
+        <span class="edit-toolbar-title">⚙ DRAG & SCALE MODE ACTIVE</span>
+        <div class="edit-scale-group">
+          <span class="scale-label">Scale:</span>
+          <button type="button" class="edit-tool-btn" id="btn-scale-down" title="Scale Down">－</button>
+          <span id="scale-indicator" class="scale-indicator">100%</span>
+          <button type="button" class="edit-tool-btn" id="btn-scale-up" title="Scale Up">＋</button>
+        </div>
+        <button type="button" class="edit-tool-action save" id="btn-save-layout-positions">SAVE</button>
+        <button type="button" class="edit-tool-action reset" id="btn-reset-layout-positions">RESET</button>
+        <button type="button" class="edit-tool-action done" id="btn-exit-edit-mode">DONE</button>
+      </div>
+    </div>
+
+    <!-- Main Deck Stage -->
+    <main class="deck-stage">
+      
+      <!-- ============================================================
+           DECK 0: DESKTOP COMMAND HUB (PC HOST MONITOR & QR PAIRING CENTER)
+           ============================================================ -->
+      <div class="deck-view deck-hub" id="deck-hub">
+        <div class="hub-stage-grid">
+          
+          <!-- Column 1: Hero QR Pairing & Connection Card -->
+          <div class="hub-card hub-qr-hero">
+            <div class="hub-card-header">
+              <span class="hub-tag">PHONE PAIRING</span>
+              <span class="hub-status-live" id="hub-status-badge">● READY</span>
+            </div>
+            
+            <div class="hub-qr-frame">
+              <img id="hub-qr-img" src="" alt="Scan QR Code" width="190" height="190">
+            </div>
+
+            <div class="hub-pin-banner">
+              <span class="hub-pin-label">PAIRING PIN</span>
+              <span class="hub-pin-code" id="hub-pin-display" title="Click to edit or customize PIN">----</span>
+              <button type="button" class="hub-pin-edit-btn" id="hub-btn-edit-pin" title="Change or randomize Pairing PIN">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                <span>EDIT</span>
+              </button>
+            </div>
+
+            <p class="hub-instruction">
+              Point your smartphone or tablet camera at the QR code above on the same Wi-Fi. No mobile app installation required.
+            </p>
+
+            <div class="hub-url-box">
+              <input type="text" readonly id="hub-url-input" class="hub-url-field" value="http://localhost:3480">
+              <button type="button" id="hub-btn-copy" class="hub-btn-action">Copy</button>
+            </div>
+          </div>
+
+          <!-- Column 2: Live Gamepad Visualizer & Input Monitor -->
+          <div class="hub-card hub-visualizer-card">
+            <div class="hub-card-header">
+              <span class="hub-tag">LIVE CONTROLLER INPUT TESTER</span>
+              <span class="hub-latency-tag" id="hub-latency-badge">&lt;1ms</span>
+            </div>
+
+            <!-- Stylized Mechanical Gamepad Wireframe -->
+            <div class="hub-controller-wireframe">
+              <!-- Top Bumpers & Triggers -->
+              <div class="hub-wf-top">
+                <div class="hub-wf-group">
+                  <span class="hub-wf-btn trigger" data-wf="BTN_LT">LT</span>
+                  <span class="hub-wf-btn bumper" data-wf="BTN_LB">LB</span>
+                </div>
+                <div class="hub-wf-meta">
+                  <span class="hub-wf-btn meta" data-wf="BTN_SELECT">BACK</span>
+                  <span class="hub-wf-btn meta-home" data-wf="BTN_HOME">M</span>
+                  <span class="hub-wf-btn meta" data-wf="BTN_START">START</span>
+                </div>
+                <div class="hub-wf-group">
+                  <span class="hub-wf-btn bumper" data-wf="BTN_RB">RB</span>
+                  <span class="hub-wf-btn trigger" data-wf="BTN_RT">RT</span>
+                </div>
+              </div>
+
+              <!-- Main Controller Body -->
+              <div class="hub-wf-body">
+                <!-- Left Wing: Stick + Dpad -->
+                <div class="hub-wf-wing left">
+                  <div class="hub-wf-stick" id="hub-stick-left">
+                    <div class="hub-wf-stick-dot" id="hub-stick-left-dot"></div>
+                  </div>
+                  <div class="hub-wf-dpad">
+                    <span class="hub-wf-dpad-dir up" data-wf="DPAD_UP">▲</span>
+                    <div class="hub-wf-dpad-middle">
+                      <span class="hub-wf-dpad-dir left" data-wf="DPAD_LEFT">◀</span>
+                      <span class="hub-wf-dpad-center"></span>
+                      <span class="hub-wf-dpad-dir right" data-wf="DPAD_RIGHT">▶</span>
+                    </div>
+                    <span class="hub-wf-dpad-dir down" data-wf="DPAD_DOWN">▼</span>
+                  </div>
+                </div>
+
+                <!-- Center: Telemetry Status HUD -->
+                <div class="hub-wf-center">
+                  <div class="hub-hud-brand">MASHINA KONTROL</div>
+                  <div class="hub-hud-status" id="hub-active-device-name">Waiting for Phone...</div>
+                  <div class="hub-hud-sub">Win32 SendInput: <strong style="color: var(--mashina-emerald);">ACTIVE</strong></div>
+                  <button type="button" id="hub-btn-open-pad" class="hub-hud-pad-btn">🎮 Switch to Touch Pad View</button>
+                </div>
+
+                <!-- Right Wing: Right Stick (Inner) + Face Buttons (Outer) -->
+                <div class="hub-wf-wing right">
+                  <div class="hub-wf-stick" id="hub-stick-right">
+                    <div class="hub-wf-stick-dot" id="hub-stick-right-dot"></div>
+                  </div>
+                  <div class="hub-wf-face">
+                    <span class="hub-wf-face-btn btn-y" data-wf="BTN_Y">Y</span>
+                    <div class="hub-wf-face-middle">
+                      <span class="hub-wf-face-btn btn-x" data-wf="BTN_X">X</span>
+                      <span class="hub-wf-face-btn btn-b" data-wf="BTN_B">B</span>
+                    </div>
+                    <span class="hub-wf-face-btn btn-a" data-wf="BTN_A">A</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Couch Multiplayer Pilots Bay (P1-P8 Telemetry) -->
+            <div class="hub-card hub-multiplayer-card">
+              <div class="hub-card-header">
+                <span class="hub-tag" style="color:var(--mashina-cyan); border-color:var(--mashina-cyan);">COUCH MULTIPLAYER RIGS</span>
+                <span class="hub-players-active-tag" id="hub-players-count">0 / 8 Active Pilots</span>
+              </div>
+              <p class="hub-driver-desc" style="margin-bottom: 8px;">
+                Connect phones on the same Wi-Fi to join as separate controllers. Each phone claims its own slot and glowing callsign.
+              </p>
+              <div class="hub-player-slots-grid" id="hub-slots-grid"></div>
+            </div>
+
+            <!-- Gamepad Driver & In-Game Prompts Info Card -->
+            <div class="hub-driver-card" id="hub-driver-card">
+              <div class="hub-driver-header">
+                <span class="hub-tag" style="color:var(--mashina-amber); border-color:var(--mashina-amber);">GAME CONTROLLER MODE</span>
+                <span class="hub-driver-status" id="hub-driver-status-text">⌨️ Keyboard/Mouse Emulation</span>
+              </div>
+              <p class="hub-driver-desc">
+                By default, games detect inputs as PC keys (Space, WASD). To enable <strong>native Xbox 360 controller detection</strong> so games display (A), (B), (X), (Y) icons and true 360° analog sticks:
+              </p>
+              <div class="hub-driver-actions">
+                <button type="button" class="hub-btn-driver" id="btn-install-vigem">
+                  ⚡ Install Driver In-App (Bundled)
+                </button>
+                <span class="hub-driver-note">Offline bundled driver package included (Zero external downloads)</span>
+              </div>
+            </div>
+
+            <!-- Bottom Diagnostics Row -->
+            <div class="hub-diag-row">
+              <div class="hub-diag-item">Active Slots: <strong id="hub-diag-slot" style="color:var(--mashina-cyan);">0/8</strong></div>
+              <div class="hub-diag-item">Driver: <strong style="color:var(--mashina-emerald);">Native Win32 SendInput</strong></div>
+              <div class="hub-diag-item">Protocol: <strong style="color:var(--text-main);">Binary RFC 6455</strong></div>
+              <div class="hub-diag-item">Host Platform: <strong id="hub-diag-os" style="color:var(--text-main);">Windows</strong></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============================================================
+           DECK 1: GAMEPAD (Xbox / PlayStation / SNES)
+           ============================================================ -->
+      <div class="deck-view deck-gamepad active" id="deck-gamepad">
+        <!-- Top Bumpers & Triggers + Layout Switcher -->
+        <div class="gamepad-top-row">
+          <div class="bumper-group" id="bumper-group-left" data-id="bumper-group-left">
+            <button class="hw-trigger" id="btn-lt" data-key="BTN_LT" data-id="BTN_LT">LT</button>
+            <button class="hw-bumper" id="btn-lb" data-key="BTN_LB" data-id="BTN_LB">LB</button>
+          </div>
+          
+          <div class="center-meta-buttons">
+            <button class="meta-pill-btn" id="btn-select" data-key="BTN_SELECT" data-id="BTN_SELECT">SELECT</button>
+            
+            <!-- Sub-Layout Selector Pills -->
+            <div class="layout-selector-bar">
+              <button class="layout-opt active" data-layout="xbox">PC</button>
+              <button class="layout-opt" data-layout="ps">PS</button>
+              <button class="layout-opt" data-layout="snes">SNES</button>
+            </div>
+
+            <button class="home-badge-btn" id="btn-home" data-key="BTN_HOME" data-id="BTN_HOME">M</button>
+            <button class="meta-pill-btn" id="btn-start" data-key="BTN_START" data-id="BTN_START">START</button>
+          </div>
+
+          <div class="bumper-group" id="bumper-group-right" data-id="bumper-group-right">
+            <button class="hw-bumper" id="btn-rb" data-key="BTN_RB" data-id="BTN_RB">RB</button>
+            <button class="hw-trigger" id="btn-rt" data-key="BTN_RT" data-id="BTN_RT">RT</button>
+          </div>
+        </div>
+
+        <!-- Middle Controls: Dynamic per Controller Layout -->
+        <div class="gamepad-middle-zone layout-xbox" id="gamepad-middle-zone">
+          <!-- Left Wing: Top Left Stick + Bottom D-Pad (Xbox Asymmetry) -->
+          <div class="controller-wing-left" id="ctrl-wing-left">
+            <div class="joystick-pod-wrapper" id="joystick-left-wrapper">
+              <div class="joystick-pod" id="joystick-left-pod">
+                <div class="joystick-thumb" id="joystick-left-thumb"></div>
+              </div>
+            </div>
+
+            <div class="dpad-cross" id="dpad-container">
+              <button class="dpad-btn up" id="btn-dpad-up" data-key="DPAD_UP" data-id="DPAD_UP">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5l-7 7h14z"/></svg>
+              </button>
+              <button class="dpad-btn left" id="btn-dpad-left" data-key="DPAD_LEFT" data-id="DPAD_LEFT">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 12l7-7v14z"/></svg>
+              </button>
+              <div class="dpad-center-hub"></div>
+              <button class="dpad-btn right" id="btn-dpad-right" data-key="DPAD_RIGHT" data-id="DPAD_RIGHT">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 12l-7-7v14z"/></svg>
+              </button>
+              <button class="dpad-btn down" id="btn-dpad-down" data-key="DPAD_DOWN" data-id="DPAD_DOWN">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 19l-7-7h14z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Wing: Bottom Right Stick (Inner) + Top Face Diamond (Outer) (Xbox Asymmetry) -->
+          <div class="controller-wing-right" id="ctrl-wing-right">
+            <div class="joystick-pod-wrapper" id="joystick-right-wrapper">
+              <div class="joystick-pod" id="joystick-right-pod">
+                <div class="joystick-thumb" id="joystick-right-thumb"></div>
+              </div>
+            </div>
+
+            <div class="face-diamond" id="face-diamond-container">
+              <button class="face-btn btn-y pos-top" id="btn-face-y" data-key="BTN_Y" data-id="BTN_Y">Y</button>
+              <button class="face-btn btn-x pos-left" id="btn-face-x" data-key="BTN_X" data-id="BTN_X">X</button>
+              <button class="face-btn btn-b pos-right" id="btn-face-b" data-key="BTN_B" data-id="BTN_B">B</button>
+              <button class="face-btn btn-a pos-bottom" id="btn-face-a" data-key="BTN_A" data-id="BTN_A">A</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           DECK 2: STREAM DECK / MACRO PAD (12 MACHINED TILES)
+           ============================================================ -->
+      <div class="deck-view deck-stream" id="deck-stream">
+        <div class="macro-grid-12" id="macro-grid">
+          <!-- Row 1: Comms & Recording -->
+          <div class="macro-tile" id="tile-discord-mute" data-macro-key="DISCORD_MUTE" data-id="TILE_MUTE" data-toggle="true">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" x2="12" y1="19" y2="22"></line></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Mute Mic</span><span class="tile-key-bind">Ctrl+Shift+M</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-discord-deafen" data-macro-key="DISCORD_DEAFEN" data-id="TILE_DEAFEN" data-toggle="true">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Deafen</span><span class="tile-key-bind">Ctrl+Shift+D</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-obs-rec" data-macro-key="OBS_REC" data-id="TILE_REC" data-toggle="true">
+            <div class="tile-top">
+              <span class="tile-icon" style="color: #FF5252;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"></circle></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Record</span><span class="tile-key-bind">F16 (OBS)</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-pres-shot" data-macro-key="CLIP_SCREENSHOT" data-id="TILE_SHOT">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Screenshot</span><span class="tile-key-bind">Win+Shift+S</span></div>
+          </div>
+
+          <!-- Row 2: OBS Scene Selectors -->
+          <div class="macro-tile" id="tile-scene-1" data-macro-key="OBS_SCENE_1" data-id="TILE_SCENE1">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Scene 1: Main</span><span class="tile-key-bind">F13</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-scene-2" data-macro-key="OBS_SCENE_2" data-id="TILE_SCENE2">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="4"></rect><path d="M6 12h4m-2-2v4"></path><circle cx="15" cy="11" r="1" fill="currentColor"></circle><circle cx="18" cy="13" r="1" fill="currentColor"></circle></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Scene 2: Game</span><span class="tile-key-bind">F14</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-scene-3" data-macro-key="OBS_SCENE_3" data-id="TILE_SCENE3">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Scene 3: Cam</span><span class="tile-key-bind">F15</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-media-play" data-macro-key="MEDIA_PLAY" data-id="TILE_PLAY">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Play / Pause</span><span class="tile-key-bind">MediaPlay</span></div>
+          </div>
+
+          <!-- Row 3: Audio Transport -->
+          <div class="macro-tile" id="tile-media-prev" data-macro-key="MEDIA_PREV" data-id="TILE_PREV">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" x2="5" y1="19" y2="5"></line></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Previous</span><span class="tile-key-bind">MediaPrev</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-media-next" data-macro-key="MEDIA_NEXT" data-id="TILE_NEXT">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" x2="19" y1="5" y2="19"></line></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Next Track</span><span class="tile-key-bind">MediaNext</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-vol-down" data-macro-key="MEDIA_VOL_DOWN" data-id="TILE_VOLDN">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Volume Down</span><span class="tile-key-bind">Vol-</span></div>
+          </div>
+
+          <div class="macro-tile" id="tile-vol-up" data-macro-key="MEDIA_VOL_UP" data-id="TILE_VOLUP">
+            <div class="tile-top">
+              <span class="tile-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+              </span>
+              <span class="tile-led"></span>
+            </div>
+            <div class="tile-bottom"><span class="tile-label">Volume Up</span><span class="tile-key-bind">Vol+</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           DECK 3: TRACKPAD & NUMPAD
+           ============================================================ -->
+      <div class="deck-view deck-trackpad" id="deck-trackpad">
+        <div class="trackpad-surface-container">
+          <div class="trackpad-header-bar">
+            <span class="trackpad-title">PRECISION TOUCHPAD</span>
+            <button type="button" class="trackpad-toggle-btn" id="btn-toggle-trackpad-full" title="Toggle Full Width Trackpad">
+              <span id="trackpad-toggle-text">⛶ EXPAND FULL</span>
+            </button>
+          </div>
+          <div class="trackpad-surface" id="trackpad-surface">
+            <div class="trackpad-hint">1-Finger Move · Tap Click · 2-Finger Scroll</div>
+          </div>
+          <div class="trackpad-buttons">
+            <button class="track-btn" id="track-left-btn">Left Click</button>
+            <button class="track-btn" id="track-right-btn">Right Click</button>
+          </div>
+        </div>
+
+        <div class="numpad-container" id="trackpad-numpad-container">
+          <button class="num-key" data-key="NUM_CLEAR" data-id="NUM_CLEAR">C</button>
+          <button class="num-key" data-key="NUM_DIV" data-id="NUM_DIV">/</button>
+          <button class="num-key" data-key="NUM_MUL" data-id="NUM_MUL">*</button>
+          <button class="num-key" data-key="NUM_SUB" data-id="NUM_SUB">-</button>
+
+          <button class="num-key" data-key="NUM_7" data-id="NUM_7">7</button>
+          <button class="num-key" data-key="NUM_8" data-id="NUM_8">8</button>
+          <button class="num-key" data-key="NUM_9" data-id="NUM_9">9</button>
+          <button class="num-key" data-key="NUM_ADD" data-id="NUM_ADD">+</button>
+
+          <button class="num-key" data-key="NUM_4" data-id="NUM_4">4</button>
+          <button class="num-key" data-key="NUM_5" data-id="NUM_5">5</button>
+          <button class="num-key" data-key="NUM_6" data-id="NUM_6">6</button>
+          <button class="num-key enter-key" data-key="NUM_ENTER" data-id="NUM_ENTER">ENT</button>
+
+          <button class="num-key" data-key="NUM_1" data-id="NUM_1">1</button>
+          <button class="num-key" data-key="NUM_2" data-id="NUM_2">2</button>
+          <button class="num-key" data-key="NUM_3" data-id="NUM_3">3</button>
+
+          <button class="num-key zero-key" data-key="NUM_0" data-id="NUM_0">0</button>
+          <button class="num-key" data-key="NUM_DOT" data-id="NUM_DOT">.</button>
+          <button class="num-key backspace-key" data-key="BACKSPACE" data-id="NUM_BACKSPACE" title="Backspace">⌫</button>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           DECK 4: PRESENTATION REMOTE
+           ============================================================ -->
+      <!-- ============================================================
+           DECK 4: PRESENTATION REMOTE (Timer + Teleprompter + Remote)
+           ============================================================ -->
+      <div class="deck-view deck-present" id="deck-present">
+        <!-- Presentation Deck Top Bar: Timer & Teleprompter Toggle -->
+        <div class="pres-deck-header">
+          <div class="pres-timer-unit">
+            <span class="pres-timer-label">STAGE TIMER</span>
+            <span class="pres-timer-digits" id="pres-timer-display">00:00:00</span>
+            <div class="pres-timer-actions">
+              <button class="timer-btn" id="btn-timer-toggle" title="Start / Pause Timer">▶ START</button>
+              <button class="timer-btn" id="btn-timer-reset" title="Reset Timer">RESET</button>
+              <select id="pres-timer-target" class="timer-select" title="Target Presentation Time">
+                <option value="0">Limit: Free</option>
+                <option value="5">Limit: 5 min</option>
+                <option value="10">Limit: 10 min</option>
+                <option value="15">Limit: 15 min</option>
+                <option value="20">Limit: 20 min</option>
+                <option value="30">Limit: 30 min</option>
+                <option value="45">Limit: 45 min</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pres-prompter-toggle-unit">
+            <button class="prompter-toggle-btn" id="btn-prompter-toggle" title="Open Teleprompter / Speaker Notes">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10M6 10h10M6 14h6"></path></svg>
+              <span>TELEPROMPTER</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Giant Slide Triggers -->
+        <div class="presentation-stage-hero">
+          <button class="pres-giant-btn" id="btn-pres-prev" data-key="PRES_PREV" data-id="PRES_PREV">
+            <span class="pres-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"></polygon></svg>
+            </span>
+            <span class="pres-title">Previous Slide</span>
+          </button>
+          <button class="pres-giant-btn" id="btn-pres-next" data-key="PRES_NEXT" data-id="PRES_NEXT">
+            <span class="pres-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"></polygon></svg>
+            </span>
+            <span class="pres-title">Next Slide</span>
+          </button>
+        </div>
+
+        <!-- Aux Controls & Media Bar -->
+        <div class="pres-aux-controls">
+          <button class="pres-aux-btn" id="btn-pres-start" data-key="PRES_START" data-id="PRES_START">
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </span>
+            <span>F5 Slideshow</span>
+          </button>
+          <button class="pres-aux-btn" id="btn-pres-black" data-key="PRES_BLACK" data-id="PRES_BLACK">
+            <span style="display:inline-block; width:12px; height:12px; background:#333; border:1px solid #666; border-radius:1px;"></span>
+            <span>Blackout (B)</span>
+          </button>
+          <button class="pres-aux-btn" id="btn-pres-white" data-key="PRES_WHITE" data-id="PRES_WHITE">
+            <span style="display:inline-block; width:12px; height:12px; background:#EEE; border:1px solid #FFF; border-radius:1px;"></span>
+            <span>Whiteout (W)</span>
+          </button>
+          <button class="pres-aux-btn" id="btn-pres-play" data-macro-key="MEDIA_PLAY" data-id="PRES_PLAY" title="Media Play/Pause">
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </span>
+            <span>Play/Pause</span>
+          </button>
+          <button class="pres-aux-btn" id="btn-pres-voldn" data-macro-key="MEDIA_VOL_DOWN" data-id="PRES_VOLDN" title="Volume Down">
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
+            </span>
+            <span>Vol -</span>
+          </button>
+          <button class="pres-aux-btn" id="btn-pres-volup" data-macro-key="MEDIA_VOL_UP" data-id="PRES_VOLUP" title="Volume Up">
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+            </span>
+            <span>Vol +</span>
+          </button>
+          <button class="pres-aux-btn" id="btn-pres-exit" data-key="PRES_EXIT" data-id="PRES_EXIT">
+            <span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </span>
+            <span>Escape</span>
+          </button>
+        </div>
+
+        <!-- Teleprompter & Speaker Notes Overlay Drawer -->
+        <div class="prompter-drawer" id="prompter-drawer">
+          <div class="prompter-bar">
+            <div class="prompter-title">SPEAKER NOTES / TELEPROMPTER</div>
+            <div class="prompter-controls">
+              <button class="prompter-ctrl-btn" id="btn-prompter-play">▶ Auto-Scroll</button>
+              <button class="prompter-ctrl-btn" id="btn-prompter-slower">▼ Slower</button>
+              <span class="prompter-speed-label" id="prompter-speed-val">1.5x</span>
+              <button class="prompter-ctrl-btn" id="btn-prompter-faster">▲ Faster</button>
+              <button class="prompter-ctrl-btn" id="btn-prompter-font-dn">A-</button>
+              <button class="prompter-ctrl-btn" id="btn-prompter-font-up">A+</button>
+              <button class="prompter-ctrl-btn" id="btn-prompter-mirror">⇄ Mirror</button>
+              <button class="prompter-ctrl-btn" id="btn-prompter-edit">✎ Edit Notes</button>
+              <button class="prompter-ctrl-btn" id="btn-prompter-close">✕ Close</button>
+            </div>
+          </div>
+          <div class="prompter-body" id="prompter-body">
+            <div class="prompter-scroll-view" id="prompter-scroll-view">
+              <p>Welcome to Mashina Kontrol Presentation Remote.</p>
+              <p>• Speak clearly and keep an eye on the stage timer above.</p>
+              <p>• Use your thumb on the giant Previous / Next buttons to navigate slides without looking down.</p>
+              <p>• You can edit this speech script anytime by tapping "Edit Notes". Notes are saved automatically on this device.</p>
+            </div>
+            <textarea class="prompter-editor" id="prompter-editor" style="display: none;" placeholder="Type or paste your presentation notes and speech script here..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           DECK 5: FULL PC QWERTY KEYBOARD DECK
+           ============================================================ -->
+      <div class="deck-view deck-keyboard" id="deck-keyboard">
+        <!-- Live Typing Bar -->
+        <div class="keyboard-live-input-bar">
+          <input type="text" id="kb-string-input" class="kb-input-field" placeholder="Type text to send directly to PC...">
+          <button id="kb-string-send-btn" class="kb-send-btn">Type Text</button>
+        </div>
+
+        <!-- Quick Utility Strip for Mobile / Portrait -->
+        <div class="kb-mobile-utility-bar">
+          <button class="kb-util-btn" data-macro-key="CLIP_COPY" data-id="KB_COPY">COPY</button>
+          <button class="kb-util-btn" data-macro-key="CLIP_PASTE" data-id="KB_PASTE">PASTE</button>
+          <button class="kb-util-btn" data-macro-key="UNDO" data-id="KB_UNDO">UNDO</button>
+          <button class="kb-util-btn" data-key="ESC" data-id="KB_ESC">ESC</button>
+          <button class="kb-util-btn" data-key="TAB" data-id="KB_TAB">TAB</button>
+          <button class="kb-util-btn" data-key="ENTER" data-id="KB_ENT" style="color: var(--mashina-emerald); font-weight: 800;">ENTER</button>
+        </div>
+
+        <!-- Full QWERTY Matrix -->
+        <div class="keyboard-rows-container">
+          <!-- Row 0: Esc + F1 - F12 + Del -->
+          <div class="kb-row">
+            <button class="kb-key key-wide" data-key="ESC">ESC</button>
+            <button class="kb-key" data-key="F1">F1</button>
+            <button class="kb-key" data-key="F2">F2</button>
+            <button class="kb-key" data-key="F3">F3</button>
+            <button class="kb-key" data-key="F4">F4</button>
+            <button class="kb-key" data-key="F5">F5</button>
+            <button class="kb-key" data-key="F6">F6</button>
+            <button class="kb-key" data-key="F7">F7</button>
+            <button class="kb-key" data-key="F8">F8</button>
+            <button class="kb-key" data-key="F9">F9</button>
+            <button class="kb-key" data-key="F10">F10</button>
+            <button class="kb-key" data-key="F11">F11</button>
+            <button class="kb-key" data-key="F12">F12</button>
+            <button class="kb-key key-wide" data-key="DELETE">DEL</button>
+          </div>
+
+          <!-- Row 1: Numbers -->
+          <div class="kb-row">
+            <button class="kb-key" data-key="`">`</button>
+            <button class="kb-key" data-key="1">1</button>
+            <button class="kb-key" data-key="2">2</button>
+            <button class="kb-key" data-key="3">3</button>
+            <button class="kb-key" data-key="4">4</button>
+            <button class="kb-key" data-key="5">5</button>
+            <button class="kb-key" data-key="6">6</button>
+            <button class="kb-key" data-key="7">7</button>
+            <button class="kb-key" data-key="8">8</button>
+            <button class="kb-key" data-key="9">9</button>
+            <button class="kb-key" data-key="0">0</button>
+            <button class="kb-key" data-key="-">-</button>
+            <button class="kb-key" data-key="=">=</button>
+            <button class="kb-key key-wide" data-key="BACKSPACE">BKSP</button>
+          </div>
+
+          <!-- Row 2: QWERTY -->
+          <div class="kb-row">
+            <button class="kb-key key-wide" data-key="TAB">TAB</button>
+            <button class="kb-key" data-key="Q">Q</button>
+            <button class="kb-key" data-key="W">W</button>
+            <button class="kb-key" data-key="E">E</button>
+            <button class="kb-key" data-key="R">R</button>
+            <button class="kb-key" data-key="T">T</button>
+            <button class="kb-key" data-key="Y">Y</button>
+            <button class="kb-key" data-key="U">U</button>
+            <button class="kb-key" data-key="I">I</button>
+            <button class="kb-key" data-key="O">O</button>
+            <button class="kb-key" data-key="P">P</button>
+            <button class="kb-key" data-key="[">[</button>
+            <button class="kb-key" data-key="]">]</button>
+            <button class="kb-key" data-key="\">\</button>
+          </div>
+
+          <!-- Row 3: ASDF -->
+          <div class="kb-row">
+            <button class="kb-key key-wide key-mod" id="kb-mod-caps" data-key="CAPSLOCK">CAPS</button>
+            <button class="kb-key" data-key="A">A</button>
+            <button class="kb-key" data-key="S">S</button>
+            <button class="kb-key" data-key="D">D</button>
+            <button class="kb-key" data-key="F">F</button>
+            <button class="kb-key" data-key="G">G</button>
+            <button class="kb-key" data-key="H">H</button>
+            <button class="kb-key" data-key="J">J</button>
+            <button class="kb-key" data-key="K">K</button>
+            <button class="kb-key" data-key="L">L</button>
+            <button class="kb-key" data-key=";">;</button>
+            <button class="kb-key" data-key="'">'</button>
+            <button class="kb-key key-wide" data-key="ENTER" style="background:#19241A; border-color:#284D2C; color:#00E676;">ENTER</button>
+          </div>
+
+          <!-- Row 4: ZXCV -->
+          <div class="kb-row">
+            <button class="kb-key key-wide key-mod" id="kb-mod-shift" data-key="SHIFT">SHIFT</button>
+            <button class="kb-key" data-key="Z">Z</button>
+            <button class="kb-key" data-key="X">X</button>
+            <button class="kb-key" data-key="C">C</button>
+            <button class="kb-key" data-key="V">V</button>
+            <button class="kb-key" data-key="B">B</button>
+            <button class="kb-key" data-key="N">N</button>
+            <button class="kb-key" data-key="M">M</button>
+            <button class="kb-key" data-key=",">,</button>
+            <button class="kb-key" data-key=".">.</button>
+            <button class="kb-key" data-key="/">/</button>
+            <button class="kb-key" data-key="ARROWUP">▲</button>
+            <button class="kb-key key-wide key-mod" data-key="SHIFT">SHIFT</button>
+          </div>
+
+          <!-- Row 5: Modifiers & Space -->
+          <div class="kb-row">
+            <button class="kb-key key-mod" id="kb-mod-ctrl" data-key="CTRL">CTRL</button>
+            <button class="kb-key key-mod" id="kb-mod-win" data-key="WIN">WIN</button>
+            <button class="kb-key key-mod" id="kb-mod-alt" data-key="ALT">ALT</button>
+            <button class="kb-key key-space" data-key="SPACE">SPACE</button>
+            <button class="kb-key key-mod" data-key="ALT">ALT</button>
+            <button class="kb-key" data-key="ARROWLEFT">◀</button>
+            <button class="kb-key" data-key="ARROWDOWN">▼</button>
+            <button class="kb-key" data-key="ARROWRIGHT">▶</button>
+            <button class="kb-key key-mod" data-key="CTRL">CTRL</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Theme Switcher Modal -->
+    <div class="modal-overlay" id="theme-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <span class="modal-title">HARDWARE PALETTES</span>
+          <button class="modal-close-btn" id="theme-close-btn">✕</button>
+        </div>
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">
+          Select tactile hardware finish & phosphor contrast:
+        </p>
+        <div class="theme-pill-grid">
+          <button class="theme-opt-btn active" data-theme="charcoal">Charcoal (CNC)</button>
+          <button class="theme-opt-btn" data-theme="paper">Blueprint Paper</button>
+          <button class="theme-opt-btn" data-theme="amber">Amber CRT</button>
+          <button class="theme-opt-btn" data-theme="retro">1990s Japanese</button>
+          <button class="theme-opt-btn" data-theme="stealth">Machined Stealth</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Rebinding & Customizer Modal -->
+    <div class="modal-overlay" id="customizer-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <span class="modal-title" id="customizer-target-title">CUSTOMIZE BUTTON</span>
+          <button class="modal-close-btn" id="customizer-close-btn">✕</button>
+        </div>
+        <form id="customizer-form" onsubmit="return false;">
+          <input type="hidden" id="cust-target-id">
+          
+          <div class="form-group">
+            <label class="form-label">Display Label</label>
+            <input type="text" id="cust-label" class="form-input" placeholder="e.g. Mic Mute, Jump, F13">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Action Mode</label>
+            <select id="cust-action-type" class="form-select">
+              <option value="KEY">Single Key (Gamepad/Keyboard)</option>
+              <option value="CHORD">Hotkey Chord (e.g. Ctrl+Shift+M)</option>
+              <option value="SHELL">Shell Command / Script</option>
+              <option value="TEXT">Type Text String</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Keybinding / Payload</label>
+            <input type="text" id="cust-payload" class="form-input" placeholder="e.g. BTN_A, F13, Ctrl+Alt+T, or text">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tactile Haptic Feedback</label>
+            <select id="cust-haptic" class="form-select">
+              <option value="0">Off (0ms)</option>
+              <option value="10">Light Click (10ms)</option>
+              <option value="20">Medium Punch (20ms)</option>
+              <option value="40">Heavy Recoil (40ms)</option>
+              <option value="double">Double Micro-Pulse</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 14px;">
+            <button type="button" id="cust-save-btn" class="kb-send-btn" style="flex: 1;">Save Binding</button>
+            <button type="button" id="cust-reset-btn" class="track-btn" style="flex: 1;">Reset Default</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Settings & Customizer Modal (Triggered by Wrench Button) -->
+    <div class="modal-overlay" id="settings-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <span class="modal-title">MACHINERY SETTINGS</span>
+          <button class="modal-close-btn" id="settings-close-btn">✕</button>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-row">
+            <span class="settings-label">Tactile Haptics</span>
+            <select id="setting-haptics" class="form-select" style="width: auto;">
+              <option value="enabled">Enabled (Tactile Clicks)</option>
+              <option value="disabled">Disabled</option>
+            </select>
+          </div>
+
+          <div class="settings-row" style="margin-top: 8px;">
+            <span class="settings-label">Mechanical Audio Synth</span>
+            <select id="setting-audio" class="form-select" style="width: auto;">
+              <option value="enabled">Enabled (Micro-Clicks)</option>
+              <option value="disabled">Disabled</option>
+            </select>
+          </div>
+
+          <div class="settings-row" style="margin-top: 8px;">
+            <span class="settings-label">Orientation Adaptation</span>
+            <select id="setting-orientation" class="form-select" style="width: auto;">
+              <option value="auto">Auto Sensor (Landscape / Portrait)</option>
+              <option value="landscape">Prefer Landscape</option>
+              <option value="portrait">Prefer Portrait</option>
+            </select>
+          </div>
+
+          <div class="settings-row" style="margin-top: 8px;">
+            <span class="settings-label">Joystick Positioning</span>
+            <select id="setting-joystick-mode" class="form-select" style="width: auto;">
+              <option value="fixed">Fixed Static Thumbsticks</option>
+              <option value="dynamic">Dynamic Floating (Spawn on Touch)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-section" style="margin-top: 12px; border-top: 1px solid var(--mashina-line); padding-top: 12px;">
+          <div class="settings-section-title" style="font-family: var(--font-display); font-size: 11px; font-weight: 800; color: var(--mashina-metal); margin-bottom: 6px;">GAMEPAD LAYOUT DRAG & RESIZE</div>
+          <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">
+            Drag pods, sticks and buttons freely across the screen and scale them up or down. Tap any button to rebind its key action.
+          </p>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" id="btn-toggle-edit-mode-setting" class="kb-send-btn" style="flex: 1;">
+              ⚙ Drag & Scale Layout
+            </button>
+            <button type="button" id="btn-reset-layout-positions-modal" class="track-btn" style="flex: 1;">
+              Reset Positions & Scales
+            </button>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button type="button" id="btn-reset-all-bindings" class="track-btn" style="flex: 1; border-color: var(--mashina-line);">
+              Reset All Key Bindings
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-section" style="margin-top: 12px; border-top: 1px solid var(--mashina-line); padding-top: 12px;">
+          <div class="settings-section-title" style="font-family: var(--font-display); font-size: 11px; font-weight: 800; color: var(--mashina-metal); margin-bottom: 6px;">DEVICE & CONNECTION DIAGNOSTICS</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px;">
+            <div>Slot: <strong id="diag-slot" style="color: var(--mashina-cyan);">1/8</strong></div>
+            <div>Latency: <strong id="diag-latency" style="color: var(--mashina-emerald);">&lt;1ms</strong></div>
+            <div>Daemon: <strong id="diag-platform" style="color: var(--text-main);">Linux</strong></div>
+            <div>Protocol: <strong style="color: var(--text-main);">RFC 6455 Binary</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone Pairing & QR Code Modal -->
+    <div class="modal-overlay" id="qr-modal">
+      <div class="modal-card" style="max-width: 360px; text-align: center;">
+        <div class="modal-header">
+          <span class="modal-title">PHONE PAIRING</span>
+          <button class="modal-close-btn" id="qr-close-btn">✕</button>
+        </div>
+        <p style="font-size: 11px; color: var(--text-muted); margin: 8px 0 12px; line-height: 1.5;">
+          Point your mobile phone or tablet camera at the QR code below on the same Wi-Fi:
+        </p>
+        <div id="qr-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px;"></div>
+      </div>
+    </div>
+
+    <!-- Pairing PIN Modal -->
+    <div class="modal-overlay" id="pin-modal">
+      <div class="modal-card" style="max-width: 320px; text-align: center;">
+        <div class="modal-header" style="justify-content: center;">
+          <span class="modal-title">DEVICE PAIRING</span>
+        </div>
+        <p style="font-size: 11px; color: var(--text-muted); margin: 10px 0 14px; line-height: 1.5;">
+          Enter the 4-digit pairing PIN shown in your PC's terminal banner to authorize this device:
+        </p>
+        <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+          <input type="text" id="pin-input" maxlength="6" class="form-input" placeholder="0000" style="text-align: center; font-size: 22px; font-weight: 800; letter-spacing: 6px; width: 140px; font-family: var(--font-mono); color: var(--mashina-amber); border-color: var(--mashina-amber);">
+        </div>
+        <div id="pin-error" style="font-size: 11px; color: var(--mashina-red); margin-bottom: 10px; display: none;">Invalid PIN</div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="btn-pin-submit" class="kb-send-btn" style="flex: 1; padding: 10px 0;">Authorize</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Multiplayer Player Select Lobby Modal -->
+    <div class="modal-overlay" id="lobby-modal">
+      <div class="modal-card lobby-modal-card">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="lobby-header-dot" id="lobby-header-dot"></span>
+            <span class="modal-title">CHOOSE YOUR RIG · LOBBY</span>
+          </div>
+          <button class="modal-close-btn" id="lobby-close-btn" style="display: none;">✕</button>
+        </div>
+        <p class="lobby-subtitle">
+          Select an available controller slot, callsign, and neon rig glow for couch multiplayer:
+        </p>
+
+        <!-- Slot Selection Grid (P1..P8) -->
+        <div class="lobby-section-title">CONTROLLER SLOT:</div>
+        <div class="lobby-slots-grid" id="lobby-slots-container"></div>
+
+        <!-- Callsign Input -->
+        <div class="lobby-form-group">
+          <label class="lobby-section-title" for="lobby-name-input">PILOT CALLSIGN:</label>
+          <input type="text" id="lobby-name-input" class="form-input lobby-input" maxlength="16" placeholder="Player 1" autocomplete="off">
+        </div>
+
+        <!-- Color Palette -->
+        <div class="lobby-form-group">
+          <div class="lobby-section-title">RIG ACCENT GLOW:</div>
+          <div class="lobby-palette" id="lobby-palette-container"></div>
+        </div>
+
+        <div id="lobby-error" class="lobby-error-banner" style="display: none;"></div>
+
+        <div class="lobby-actions">
+          <button type="button" id="btn-lobby-join" class="lobby-join-btn">
+            ⚡ READY UP / JOIN GAME
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add to Home Screen Instructions Modal -->
+    <div class="modal-overlay" id="pwa-guide-modal">
+      <div class="modal-card" style="max-width: 380px;">
+        <div class="modal-header">
+          <span class="modal-title">ADD TO HOME SCREEN</span>
+          <button class="modal-close-btn" id="pwa-guide-close">✕</button>
+        </div>
+        <div style="font-size: 12px; color: var(--text-main); margin-top: 10px; line-height: 1.6;">
+          <p style="margin-bottom: 12px; color: var(--text-muted);">
+            Install Mashina Kontrol as a standalone fullscreen app on your device:
+          </p>
+          <div style="background: var(--mashina-tile-press); padding: 10px; border-radius: 4px; border: 1px solid var(--mashina-line); margin-bottom: 10px;">
+            <strong style="color: var(--mashina-cyan);">📱 iPhone / iPad (Safari):</strong>
+            <div style="margin-top: 4px; font-size: 11px;">
+              1. Tap the <strong>Share</strong> button at the bottom of Safari.<br>
+              2. Scroll down and select <strong>"Add to Home Screen"</strong> (➕).<br>
+              3. Tap <strong>Add</strong> in the top right.
+            </div>
+          </div>
+          <div style="background: var(--mashina-tile-press); padding: 10px; border-radius: 4px; border: 1px solid var(--mashina-line);">
+            <strong style="color: var(--mashina-emerald);">🤖 Android (Chrome / Edge / Samsung):</strong>
+            <div style="margin-top: 4px; font-size: 11px;">
+              1. Tap the <strong>⋮ (three dots)</strong> menu in the browser.<br>
+              2. Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.<br>
+              3. Confirm to add the icon to your home launcher.
+            </div>
+          </div>
+        </div>
+        <button type="button" id="pwa-guide-ok" class="kb-send-btn" style="width: 100%; margin-top: 14px; padding: 8px 0;">Got It</button>
+      </div>
+    </div>
+
+    <!-- Portrait Orientation Adaptation Banner -->
+    <div class="orientation-banner" id="orientation-banner" style="display: none;">
+      <span class="orient-text">↺ Landscape recommended for full controller span</span>
+      <button class="orient-dismiss" id="orient-dismiss">✕</button>
+    </div>
+  </div>
+
+  <!-- Dynamic Floating Analog Joysticks (Spawn Anywhere on Touch) -->
+  <div class="dynamic-floating-pod" id="dynamic-stick-left">
+    <div class="dynamic-floating-ring"></div>
+    <div class="dynamic-floating-thumb" id="dynamic-thumb-left"></div>
+  </div>
+  <div class="dynamic-floating-pod" id="dynamic-stick-right">
+    <div class="dynamic-floating-ring"></div>
+    <div class="dynamic-floating-thumb" id="dynamic-thumb-right"></div>
+  </div>
+
+  <script src="./qrcode.js"></script>
+  <script src="./kontrol.js?v=3.6"></script>
+</body>
+</html>

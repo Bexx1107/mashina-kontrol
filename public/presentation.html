@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mashina Kontrol — Vertical Presentation Preview (9:16)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=IBM+Plex+Mono:wght@500;600;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070606;
+      --card: #141211;
+      --border: rgba(255, 255, 255, 0.12);
+      --red: #C8102E;
+      --emerald: #00E676;
+      --cyan: #00F0FF;
+      --amber: #FFB800;
+      --text: #F4F1EA;
+      --muted: #8A8F98;
+      --font-display: "Archivo", sans-serif;
+      --font-mono: "IBM Plex Mono", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-display);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justifyContent: center;
+      min-height: 100vh;
+      padding: 24px;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* Top Studio Bar */
+    .studio-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 580px;
+      margin-bottom: 16px;
+      padding: 10px 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .brand-title {
+      font-size: 14px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 8px var(--red);
+    }
+    .format-badge {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--cyan);
+      background: rgba(0, 240, 255, 0.1);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+    }
+
+    /* Video Frame Canvas Stage (9:16 Aspect Ratio) */
+    .viewport-wrapper {
+      position: relative;
+      width: 480px;
+      height: 853px; /* 9:16 aspect ratio */
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 0 1px var(--border);
+      background: #0B0A09;
+    }
+
+    .scene-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justifyContent: space-between;
+      padding: 40px 24px 30px;
+    }
+    .scene-container.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Ambient Glow */
+    .ambient-glow {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.25;
+      pointer-events: none;
+      transition: background 0.6s ease;
+      z-index: 1;
+    }
+
+    /* Grid Overlay */
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Corner Marks */
+    .crosshair {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: rgba(255,255,255,0.2);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .crosshair.tl { top: 12px; left: 14px; }
+    .crosshair.tr { top: 12px; right: 14px; }
+    .crosshair.bl { bottom: 12px; left: 14px; }
+    .crosshair.br { bottom: 12px; right: 14px; }
+
+    /* Scene Typography */
+    .scene-header {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .scene-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .scene-tag-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+    .scene-title {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.8);
+    }
+    .scene-sub {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* Floating Phone Mockup */
+    .phone-stage {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto 0;
+      perspective: 1000px;
+    }
+    .phone-chassis {
+      background: #1C1B19;
+      padding: 8px;
+      border-radius: 28px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85), inset 0 0 0 1px rgba(255,255,255,0.15);
+      position: relative;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .phone-screen {
+      background: #000;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .phone-screen img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .phone-chassis.portrait .phone-screen {
+      width: 220px;
+      height: 440px;
+    }
+    .phone-chassis.landscape .phone-screen {
+      width: 420px;
+      height: 200px;
+    }
+
+    /* Bottom Badges */
+    .feature-strip {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      width: 100%;
+    }
+    .feature-chip {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--muted);
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+    }
+
+    /* Outro specifics */
+    .outro-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .outro-brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .outro-logo-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+    }
+    .outro-title {
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .outro-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .outro-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--emerald);
+      background: rgba(0, 230, 118, 0.08);
+      border: 1px solid rgba(0, 230, 118, 0.25);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* Studio Controls at Bottom */
+    .controls-wrapper {
+      width: 100%;
+      max-width: 580px;
+      margin-top: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .scrubber-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+    }
+    .scrubber-fill {
+      height: 100%;
+      background: var(--red);
+      border-radius: 3px;
+      width: 0%;
+      box-shadow: 0 0 10px var(--red);
+      transition: width 0.08s linear;
+    }
+    .scene-markers {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .marker {
+      position: absolute;
+      top: -2px;
+      width: 2px;
+      height: 10px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    .playback-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .play-btn {
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 8px 18px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease;
+    }
+    .play-btn:hover { background: #FFFFFF; }
+    .time-readout {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .time-readout strong { color: var(--text); }
+    .scene-pill-nav {
+      display: flex;
+      gap: 6px;
+    }
+    .scene-jump-btn {
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .scene-jump-btn.active {
+      background: rgba(255,255,255,0.18);
+      color: var(--text);
+      border-color: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Studio Bar -->
+  <div class="studio-bar">
+    <div class="brand-title">
+      <div class="brand-dot"></div>
+      <span>MASHINA KONTROL // PREVIEW</span>
+    </div>
+    <div class="format-badge">9:16 VERTICAL · 30.0s</div>
+  </div>
+
+  <!-- Viewport Stage -->
+  <div class="viewport-wrapper" id="viewport">
+    <div class="ambient-glow" id="ambient-glow" style="background: var(--cyan);"></div>
+    <div class="grid-lines"></div>
+    <div class="crosshair tl">+</div>
+    <div class="crosshair tr">+</div>
+    <div class="crosshair bl">+</div>
+    <div class="crosshair br">+</div>
+
+    <!-- Scene 1: Hook / Real App Portrait Pad (0.0s - 3.5s) -->
+    <div class="scene-container active" id="scene-0">
+      <div class="scene-header">
+        <div class="scene-tag" style="border: 1px solid rgba(0, 240, 255, 0.3); color: var(--cyan);">
+          <span class="scene-tag-dot" style="background: var(--cyan); box-shadow: 0 0 6px var(--cyan);"></span>
+          01 // ZERO INSTALL
+        </div>
+        <h1 class="scene-title">Turn your phone into pro hardware.</h1>
+        <p class="scene-sub">Zero install. Instant Wi-Fi connection.</p>
+      </div>
+
+      <div class="phone-stage">
+        <div class="phone-chassis portrait" style="transform: rotateX(4deg);">
+          <div class="phone-screen">
+            <img src="public/screenshot-portrait-gamepad.png" alt="Mashina Portrait Gamepad">
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-strip">
+        <span class="feature-chip">&lt;0.6ms WebSockets</span>
+        <span class="feature-chip">Zero App Store Install</span>
+        <span class="feature-chip">Auto Local Wi-Fi Discovery</span>
+      </div>
+    </div>
+
+    <!-- Scene 2: Gamepad Mode (3.5s - 8.0s) -->
+    <div class="scene-container" id="scene-1">
+      <div class="scene-header">
+        <div class="scene-tag" style="border: 1px solid rgba(0, 230, 118, 0.3); color: var(--emerald);">
+          <span class="scene-tag-dot" style="background: var(--emerald); box-shadow: 0 0 6px var(--emerald);"></span>
+          02 // INPUT ENGINE
+        </div>
+        <h1 class="scene-title">Sub-millisecond latency.</h1>
+        <p class="scene-sub">Xbox · DualSense · Retro SNES layouts</p>
+      </div>
+
+      <div class="phone-stage">
+        <div class="phone-chassis landscape" style="transform: rotateX(3deg) rotateY(-4deg);">
+          <div class="phone-screen">
+            <img src="public/screenshot-gamepad-xbox.png" alt="Gamepad Deck">
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-strip">
+        <span class="feature-chip">Dual Analog Sticks</span>
+        <span class="feature-chip">Haptic Feedback</span>
+        <span class="feature-chip">Win32 C# Driver</span>
+      </div>
+    </div>
+
+    <!-- Scene 3: Macro Deck (8.0s - 13.0s) -->
+    <div class="scene-container" id="scene-2">
+      <div class="scene-header">
+        <div class="scene-tag" style="border: 1px solid rgba(200, 16, 46, 0.4); color: #FF5252;">
+          <span class="scene-tag-dot" style="background: var(--red); box-shadow: 0 0 6px var(--red);"></span>
+          03 // STUDIO CONTROL
+        </div>
+        <h1 class="scene-title">12 machined macro tiles.</h1>
+        <p class="scene-sub">Instant OBS & Discord triggers.</p>
+      </div>
+
+      <div class="phone-stage">
+        <div class="phone-chassis landscape" style="transform: scale(1.04);">
+          <div class="phone-screen">
+            <img src="public/screenshot-deck.png" alt="Macro Deck">
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-strip">
+        <span class="feature-chip">Discord Mute/Deafen</span>
+        <span class="feature-chip">OBS Scenes</span>
+        <span class="feature-chip">Media Controls</span>
+      </div>
+    </div>
+
+    <!-- Scene 4: Precision Trackpad (13.0s - 17.5s) -->
+    <div class="scene-container" id="scene-3">
+      <div class="scene-header">
+        <div class="scene-tag" style="border: 1px solid rgba(255, 184, 0, 0.4); color: var(--amber);">
+          <span class="scene-tag-dot" style="background: var(--amber); box-shadow: 0 0 6px var(--amber);"></span>
+          04 // PRECISION INPUT
+        </div>
+        <h1 class="scene-title">Inertial glass trackpad.</h1>
+        <p class="scene-sub">Multi-touch gestures + 10-key numpad.</p>
+      </div>
+
+      <div class="phone-stage">
+        <div class="phone-chassis landscape" style="transform: rotateX(6deg) rotateY(-5deg);">
+          <div class="phone-screen">
+            <img src="public/screenshot-trackpad.png" alt="Trackpad Deck">
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-strip">
+        <span class="feature-chip">Inertial Smoothing</span>
+        <span class="feature-chip">2-Finger Scroll</span>
+        <span class="feature-chip">Click Rockers</span>
+      </div>
+    </div>
+
+    <!-- Scene 5: Presentation Remote (17.5s - 22.0s) -->
+    <div class="scene-container" id="scene-4">
+      <div class="scene-header">
+        <div class="scene-tag" style="border: 1px solid rgba(0, 240, 255, 0.3); color: var(--cyan);">
+          <span class="scene-tag-dot" style="background: var(--cyan); box-shadow: 0 0 6px var(--cyan);"></span>
+          05 // STAGE REMOTE
+        </div>
+        <h1 class="scene-title">Never look at your slides.</h1>
+        <p class="scene-sub">Built-in stage timer & teleprompter.</p>
+      </div>
+
+      <div class="phone-stage">
+        <div class="phone-chassis landscape" style="transform: scale(1.02);">
+          <div class="phone-screen">
+            <img src="public/screenshot-remote.png" alt="Remote Deck">
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-strip">
+        <span class="feature-chip">Giant Slide Triggers</span>
+        <span class="feature-chip">Stage Timer Clock</span>
+        <span class="feature-chip">Teleprompter Drawer</span>
+      </div>
+    </div>
+
+    <!-- Scene 6: Outro & Branding (22.0s - 26.0s) -->
+    <div class="scene-container" id="scene-5">
+      <div class="phone-stage" style="margin-top: 20px;">
+        <div class="phone-chassis landscape" style="transform: scale(0.92);">
+          <div class="phone-screen">
+            <img src="public/screenshot-gamepad-xbox.png" alt="Mashina Controller">
+          </div>
+        </div>
+      </div>
+
+      <div class="outro-content">
+        <div class="outro-brand-row">
+          <img src="public/icon-192.png" alt="Logo" class="outro-logo-img">
+          <span style="font-size: 20px; font-weight: 900; letter-spacing: 0.08em;">MASHINA · KONTROL</span>
+        </div>
+        <h2 class="outro-title">
+          Built by a machine.<br>
+          <span style="color: var(--red);">Judged by humans.</span>
+        </h2>
+        <div class="outro-pills">
+          <span class="outro-pill">100% Free & Open Source</span>
+          <span class="outro-pill">Native Win32 Driver</span>
+          <span class="outro-pill">Zero Mobile Install</span>
+          <span class="outro-pill">Multiplayer (Up to 8)</span>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 13px; color: var(--cyan); letter-spacing: 0.12em;">
+          MASHINA-STUDIO.EU // GITHUB
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Studio Bottom Controls -->
+  <div class="controls-wrapper">
+    <div class="scrubber-track" id="scrubber-track">
+      <div class="scrubber-fill" id="scrubber-fill"></div>
+      <div class="scene-markers">
+        <div class="marker" style="left: 0%;"></div>
+        <div class="marker" style="left: 11.67%;"></div>
+        <div class="marker" style="left: 26.67%;"></div>
+        <div class="marker" style="left: 43.33%;"></div>
+        <div class="marker" style="left: 58.33%;"></div>
+        <div class="marker" style="left: 73.33%;"></div>
+      </div>
+    </div>
+
+    <div class="playback-row">
+      <button class="play-btn" id="play-btn">
+        <span id="play-icon">▶</span>
+        <span id="play-text">PLAY</span>
+      </button>
+
+      <div class="scene-pill-nav">
+        <button class="scene-jump-btn active" onclick="seekTo(0)">01 Pad</button>
+        <button class="scene-jump-btn" onclick="seekTo(3.5)">02 Cockpit</button>
+        <button class="scene-jump-btn" onclick="seekTo(8.0)">03 Deck</button>
+        <button class="scene-jump-btn" onclick="seekTo(13.0)">04 Track</button>
+        <button class="scene-jump-btn" onclick="seekTo(17.5)">05 Remote</button>
+        <button class="scene-jump-btn" onclick="seekTo(22.0)">06 Outro</button>
+      </div>
+
+      <div class="time-readout">
+        <strong id="time-curr">00:00.0</strong> / 00:30.0
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const TOTAL_DURATION = 30.0;
+    const SCENES = [
+      { start: 0.0,  end: 3.5,  glow: 'var(--cyan)',    id: 'scene-0' },
+      { start: 3.5,  end: 8.0,  glow: 'var(--emerald)', id: 'scene-1' },
+      { start: 8.0,  end: 13.0, glow: 'var(--red)',     id: 'scene-2' },
+      { start: 13.0, end: 17.5, glow: 'var(--amber)',   id: 'scene-3' },
+      { start: 17.5, end: 22.0, glow: 'var(--cyan)',    id: 'scene-4' },
+      { start: 22.0, end: 30.0, glow: 'var(--red)',     id: 'scene-5' },
+    ];
+
+    let currentTime = 0;
+    let isPlaying = true;
+    let lastTimestamp = performance.now();
+
+    const scrubberFill = document.getElementById('scrubber-fill');
+    const scrubberTrack = document.getElementById('scrubber-track');
+    const timeCurr = document.getElementById('time-curr');
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const playText = document.getElementById('play-text');
+    const ambientGlow = document.getElementById('ambient-glow');
+    const sceneJumpBtns = document.querySelectorAll('.scene-jump-btn');
+
+    function updateView(t) {
+      // Find active scene
+      let activeIndex = 0;
+      for (let i = 0; i < SCENES.length; i++) {
+        if (t >= SCENES[i].start && t < SCENES[i].end) {
+          activeIndex = i;
+          break;
+        }
+        if (t >= SCENES[SCENES.length - 1].start) {
+          activeIndex = SCENES.length - 1;
+        }
+      }
+
+      SCENES.forEach((s, idx) => {
+        const el = document.getElementById(s.id);
+        if (idx === activeIndex) {
+          el.classList.add('active');
+          ambientGlow.style.background = s.glow;
+        } else {
+          el.classList.remove('active');
+        }
+      });
+
+      sceneJumpBtns.forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === activeIndex);
+      });
+
+      // Update scrubber
+      const pct = (t / TOTAL_DURATION) * 100;
+      scrubberFill.style.width = pct + '%';
+
+      // Update readout
+      const sec = Math.floor(t);
+      const dec = Math.floor((t % 1) * 10);
+      timeCurr.textContent = `00:${sec < 10 ? '0' : ''}${sec}.${dec}`;
+    }
+
+    function loop(now) {
+      if (isPlaying) {
+        const delta = (now - lastTimestamp) / 1000;
+        currentTime += delta;
+        if (currentTime >= TOTAL_DURATION) {
+          currentTime = 0;
+        }
+        updateView(currentTime);
+      }
+      lastTimestamp = now;
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playIcon.textContent = isPlaying ? '⏸' : '▶';
+      playText.textContent = isPlaying ? 'PAUSE' : 'PLAY';
+      lastTimestamp = performance.now();
+    });
+
+    function seekTo(targetSec) {
+      currentTime = targetSec;
+      updateView(currentTime);
+    }
+
+    scrubberTrack.addEventListener('click', (e) => {
+      const rect = scrubberTrack.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+      currentTime = ratio * TOTAL_DURATION;
+      updateView(currentTime);
+    });
+  </script>
+</body>
+</html>
