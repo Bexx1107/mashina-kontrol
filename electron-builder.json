@@ -48,15 +48,18 @@
         "arch": ["x64"]
       }
     ],
-    "icon": "app.ico",
-    "artifactName": "${productName}-Setup-${version}.${ext}"
+    "icon": "app.ico"
   },
   "nsis": {
     "oneClick": false,
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "Mashina Kontrol"
+    "shortcutName": "Mashina Kontrol",
+    "artifactName": "${productName}-Setup-${version}.${ext}"
+  },
+  "portable": {
+    "artifactName": "${productName}-Portable-${version}.${ext}"
   },
   "mac": {
     "target": [

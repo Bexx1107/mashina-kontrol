@@ -14,7 +14,7 @@
 
 <br/>
 
-[**⬇️ Download Windows Installer (Setup v2.1.0)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe) &nbsp;&bull;&nbsp; [**📖 User Documentation**](#-the-6-modular-decks) &nbsp;&bull;&nbsp; [**🚀 Run From Source**](#-run-from-source)
+[**⬇️ Download Windows Installer (Setup v2.1.0)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe) &nbsp;&bull;&nbsp; [**⚡ Download Portable (.exe)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe) &nbsp;&bull;&nbsp; [**📖 Documentation**](#-the-6-modular-decks)
 
 <br/>
 
