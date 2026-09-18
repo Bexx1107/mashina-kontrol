@@ -75,7 +75,8 @@
     "icon": "public/icon-512.png",
     "category": "public.app-category.utilities",
     "artifactName": "${productName}-${version}-${arch}.${ext}",
-    "hardenedRuntime": true,
+    "identity": null,
+    "hardenedRuntime": false,
     "gatekeeperAssess": false
   },
   "dmg": {

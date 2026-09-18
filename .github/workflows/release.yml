@@ -1,21 +1,23 @@
-name: Build & Release Desktop App
+name: Build macOS Release (.dmg)
 
 on:
   push:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release Tag to attach binaries to (e.g. v2.1.0)'
+        required: false
+        default: 'v2.1.0'
 
 permissions:
   contents: write
 
 jobs:
-  build:
-    name: Build (${{ matrix.os }})
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+  build-mac:
+    name: Build macOS (.dmg & .zip)
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
@@ -30,27 +32,30 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Compile macOS native input helper (if on macOS runner)
-        if: runner.os == 'macOS'
+      - name: Compile macOS native input helper
         run: |
           mkdir -p server/bin
           clang -framework ApplicationServices -framework CoreGraphics -O2 -o server/bin/kontrol-macinput server/src/KontrolMacInput.c
+          chmod +x server/bin/kontrol-macinput
 
-      - name: Build & Package Desktop Application
-        run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            npm run build:win
-          else
-            npm run build:mac
-          fi
-        shell: bash
+      - name: Build & Package Desktop App for macOS
+        run: npx electron-builder --mac
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
-      - name: Upload Artifacts to GitHub Release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Upload Artifacts to GitHub Actions
+        uses: actions/upload-artifact@v4
         with:
+          name: macos-binaries
+          path: |
+            dist/*.dmg
+            dist/*.zip
+
+      - name: Attach macOS Binaries to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.release_tag || (startsWith(github.ref, 'refs/tags/') && github.ref_name) || 'v2.1.0' }}
           files: |
-            dist/*.exe
             dist/*.dmg
             dist/*.zip
         env:
