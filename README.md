@@ -14,7 +14,7 @@
 
 <br/>
 
-[**⬇️ Download Windows Installer (Setup)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe) &nbsp;&bull;&nbsp; [**⚡ Download Portable (.exe)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe) &nbsp;&bull;&nbsp; [**📖 Documentation**](#-the-6-modular-decks)
+[**🪟 Windows Setup**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe) &nbsp;&bull;&nbsp; [**⚡ Windows Portable**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe) &nbsp;&bull;&nbsp; [**🍏 macOS Apple Silicon (.dmg)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina.Kontrol-2.1.0-arm64.dmg) &nbsp;&bull;&nbsp; [**🍏 macOS Intel (.dmg)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina.Kontrol-2.1.0-x64.dmg)
 
 <br/>
 
@@ -76,13 +76,23 @@
 
 ## 🚀 Quick Start
 
-### For Gamers (Pre-Built Downloads)
-1. Download either:
-   * **[Mashina-Kontrol-Setup-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe)** *(Recommended — full Windows installer with Start Menu & Desktop shortcuts)*
-   * **[Mashina-Kontrol-Portable-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe)** *(Zero-install standalone executable — double-click and play)*
-2. Launch **Mashina Kontrol**.
-3. Scan the QR code with your phone camera or type the local IP into your phone's browser (e.g., `http://192.168.1.50:3480`).
-4. Pick up your phone and play!
+### 🪟 Windows (10 / 11)
+* **[Mashina-Kontrol-Setup-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe)** *(Recommended — full Windows installer with Start Menu & Desktop shortcuts)*
+* **[Mashina-Kontrol-Portable-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe)** *(Zero-install standalone executable — double-click and play)*
+
+### 🍏 macOS (11.0+)
+* **[Mashina.Kontrol-2.1.0-arm64.dmg](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina.Kontrol-2.1.0-arm64.dmg)** *(Apple Silicon: M1 / M2 / M3 / M4 Macs)*
+* **[Mashina.Kontrol-2.1.0-x64.dmg](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina.Kontrol-2.1.0-x64.dmg)** *(Intel Macs)*
+
+> **macOS First-Time Launch**:
+> 1. Open the `.dmg` and drag **Mashina Kontrol** into your `Applications` folder.
+> 2. On first open, go to **System Settings ➔ Privacy & Security** and click **"Open Anyway"**.
+> 3. Grant **Accessibility** permissions when prompted so the app can send touch, key, and controller inputs.
+
+### 📱 Connect in Seconds:
+1. Launch **Mashina Kontrol** on your computer.
+2. Scan the displayed QR code with your phone's camera (or open the local URL in Safari / Chrome).
+3. Pick up your phone and play!
 
 ---
 
