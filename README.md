@@ -76,12 +76,13 @@
 
 ## 🚀 Quick Start
 
-### For Gamers (Pre-Built Installer)
-1. Download **[Mashina-Kontrol-Setup-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe)**.
-2. Run the installer (includes ViGEmBus virtual controller driver).
-3. Launch **Mashina Kontrol** from your desktop or start menu.
-4. Scan the QR code with your phone camera or type the local IP into your phone's browser (e.g., `http://192.168.1.50:3480`).
-5. Pick up your phone and play!
+### For Gamers (Pre-Built Downloads)
+1. Download either:
+   * **[Mashina-Kontrol-Setup-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe)** *(Recommended — full Windows installer with Start Menu & Desktop shortcuts)*
+   * **[Mashina-Kontrol-Portable-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe)** *(Zero-install standalone executable — double-click and play)*
+2. Launch **Mashina Kontrol**.
+3. Scan the QR code with your phone camera or type the local IP into your phone's browser (e.g., `http://192.168.1.50:3480`).
+4. Pick up your phone and play!
 
 ---
 
