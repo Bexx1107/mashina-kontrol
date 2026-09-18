@@ -80,14 +80,16 @@
 * **[Mashina-Kontrol-Setup-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe)** *(Recommended — full Windows installer with Start Menu & Desktop shortcuts)*
 * **[Mashina-Kontrol-Portable-2.1.0.exe](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe)** *(Zero-install standalone executable — double-click and play)*
 
-### 🍏 macOS (11.0+)
+### 🍏 macOS (Community Preview)
 * **[Mashina.Kontrol-2.1.0-arm64.dmg](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina.Kontrol-2.1.0-arm64.dmg)** *(Apple Silicon: M1 / M2 / M3 / M4 Macs)*
 * **[Mashina.Kontrol-2.1.0-x64.dmg](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina.Kontrol-2.1.0-x64.dmg)** *(Intel Macs)*
 
+> ⚠️ **Note on macOS**: macOS builds are provided as an experimental community release. While the CoreGraphics input bridge is fully implemented, testing has been performed strictly on Windows 10/11 hardware. Feedback and bug reports from Mac users are very welcome!
+>
 > **macOS First-Time Launch**:
 > 1. Open the `.dmg` and drag **Mashina Kontrol** into your `Applications` folder.
-> 2. On first open, go to **System Settings ➔ Privacy & Security** and click **"Open Anyway"**.
-> 3. Grant **Accessibility** permissions when prompted so the app can send touch, key, and controller inputs.
+> 2. On first open, go to **System Settings ➔ Privacy & Security** and click **"Open Anyway"** (unnotarized build).
+> 3. Grant **Accessibility** permissions when prompted so the app can dispatch touch, key, and controller inputs.
 
 ### 📱 Connect in Seconds:
 1. Launch **Mashina Kontrol** on your computer.
