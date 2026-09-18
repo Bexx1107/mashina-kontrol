@@ -39,7 +39,7 @@ jobs:
           chmod +x server/bin/kontrol-macinput
 
       - name: Build & Package Desktop App for macOS
-        run: npx electron-builder --mac
+        run: npx electron-builder --mac --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
