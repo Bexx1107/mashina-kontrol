@@ -5,7 +5,7 @@
 
 *Turn any smartphone into a physical PC game controller with sub-millisecond response, zero mobile app installation, and zero cloud relays.*
 
-[![GitHub Release](https://img.shields.io/badge/Release-v2.1.0-FF2A2A.svg?style=for-the-badge)](https://github.com/Bexx1107/mashina-kontrol/releases/latest)
+[![GitHub Release](https://img.shields.io/badge/Release-v2.1.1-FF2A2A.svg?style=for-the-badge)](https://github.com/Bexx1107/mashina-kontrol/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00F0FF.svg?style=for-the-badge)](LICENSE)
 [![Latency: <0.1ms](https://img.shields.io/badge/Latency-%3C0.1ms%20Binary%20WS-00E676.svg?style=for-the-badge)](#-architecture--latency)
 [![Gamepad: Native XInput](https://img.shields.io/badge/Gamepad-Native%20XInput%20(ViGEm)-FFB800.svg?style=for-the-badge)](#-native-gamepad-engine)
@@ -14,7 +14,7 @@
 
 <br/>
 
-[**⬇️ Download Windows Installer (Setup v2.1.0)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe) &nbsp;&bull;&nbsp; [**⚡ Download Portable (.exe)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe) &nbsp;&bull;&nbsp; [**📖 Documentation**](#-the-6-modular-decks)
+[**⬇️ Download Windows Installer (Setup)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Setup-2.1.0.exe) &nbsp;&bull;&nbsp; [**⚡ Download Portable (.exe)**](https://github.com/Bexx1107/mashina-kontrol/releases/latest/download/Mashina-Kontrol-Portable-2.1.0.exe) &nbsp;&bull;&nbsp; [**📖 Documentation**](#-the-6-modular-decks)
 
 <br/>
 
